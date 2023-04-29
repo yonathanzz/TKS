@@ -13,7 +13,7 @@ class BarangController extends Controller
      */
     public function index()
     {
-        $barang = DB::table('barang')->get();
+        $barang = Barang::all();
         return view('barang.index', ['barang' => $barang]);
     }
 

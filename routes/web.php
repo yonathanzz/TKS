@@ -22,3 +22,4 @@ Route::get('/product', function () {
 });
 
 Route::post('/login', 'LoginController@login')->name('login');
+Route::get('/barang', 'BarangController@index')->name('barang');
