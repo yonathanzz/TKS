@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\BarangController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,9 +18,10 @@ Route::get('/', function () {
     return view('exampleview');
 });
 
-Route::get('/product', function () {
-    return view('inventory.product');
+Route::get('/barang', function () {
+    return view('inventory.barang');
 });
 
+Route::resource('barang', BarangController::class);
+
 Route::post('/login', 'LoginController@login')->name('login');
-Route::get('/barang', 'BarangController@index')->name('barang');

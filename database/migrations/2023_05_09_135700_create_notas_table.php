@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('notas', function (Blueprint $table) {
-            $table->id();
+            $table->id('id');
             $table->dateTime('tanggal_waktu')->nullable();
             $table->integer('total_bayar')->nullable();
             $table->unsignedBigInteger('user_id');

@@ -493,7 +493,7 @@ License: You must have a valid license purchased only from themeforest(the above
 					</a>
 					<ul class="sub-menu">
 						<li>
-							<a href="{{ @url('product') }}">
+							<a href="{{ @url('barang') }}">
 							Products</a>
 						</li>
 						<li>
