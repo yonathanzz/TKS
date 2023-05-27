@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BarangController;
+use App\Http\Controllers\ReturController;
+use App\Http\Controllers\SupplierController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,5 +25,7 @@ Route::get('/barang', function () {
 });
 
 Route::resource('barang', BarangController::class);
+Route::resource('supplier', SupplierController::class);
+Route::resource('retur', ReturController::class);
 
-Route::post('/login', 'LoginController@login')->name('login');
+// Route::post('/login', 'LoginController@login')->name('login');

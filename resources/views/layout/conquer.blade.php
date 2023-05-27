@@ -485,6 +485,21 @@ License: You must have a valid license purchased only from themeforest(the above
 					<span class="selected"></span>
 					</a>
 				</li>
+				<li>
+					<a href="/">
+					<i class="icon-user"></i>
+					<span class="title">Administration</span>
+					<span class="arrow"></span>
+					<ul class="sub-menu">
+						<li>
+							<a href="{{@url('supplier')}}">Supplier</a>
+						</li>
+						<li>
+							<a href="{{@url('retur')}}">Retur</a>
+						</li>
+					</ul>
+					</a>
+				</li>
 				<li >
 					<a href="javascript:;">
 					<i class="icon-briefcase"></i>
