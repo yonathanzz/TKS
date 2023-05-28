@@ -32,6 +32,15 @@ class BarangController extends Controller
     public function store(Request $request)
     {
         //
+        $data = new Barang();
+        $data->nama = $request->get('nama');
+        $data->stok = $request->get('stok');
+        $data->harga_jual = $request->get('harga_jual');
+        $data->hpp = $request->get('hpp');
+        $data->barcode = $request->get('barcode');
+        $data->save();
+
+        return redirect()->route('barang.index')->with('success', 'Data has been successfully added.');
     }
 
     /**
@@ -64,5 +73,15 @@ class BarangController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function getEditForm(Request $request)
+    {
+        $id=$request->get('id');
+        $data=Barang::find($id);
+        return response()->json([
+            'status'=>'oke',
+            'msg'=>view('inventory.getEditForm', compact('data'))->render()
+        ], 200);
     }
 }

@@ -606,6 +606,7 @@ jQuery(document).ready(function() {
    Tasks.initDashboardWidget();
 });
 </script>
+@yield('javascript')
 <!-- END JAVASCRIPTS -->
 </body>
 <!-- END BODY -->

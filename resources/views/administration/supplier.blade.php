@@ -1,9 +1,14 @@
 @extends('layout.conquer')
 
-@section('title', 'List Produk Page')
+@section('title', 'List Supplier Page')
 
 @section('konten')
 <div class="container">
+    <h2>Supplier</h2>
+        <p>List Supplier</p>
+
+        <a data-target="#modalcreate" data-toggle="modal" class="btn btn-info">+ Supplier Baru</a>
+
     <div class="row">
         @foreach ($suppliers as $supplier)
         <div class="card">
@@ -36,7 +41,7 @@
             </div>
             </div>
           </div>
-          
+
         @endforeach
     </div>
 </div>

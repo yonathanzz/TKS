@@ -24,8 +24,12 @@ Route::get('/barang', function () {
     return view('inventory.barang');
 });
 
+Route::post('/barang/getEditForm', 'BarangController@getEditForm')->name('barang.getEditForm');
+
 Route::resource('barang', BarangController::class);
 Route::resource('supplier', SupplierController::class);
 Route::resource('retur', ReturController::class);
+
+
 
 // Route::post('/login', 'LoginController@login')->name('login');
