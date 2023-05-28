@@ -29,7 +29,15 @@ class SupplierController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = new Supplier();
+        $data->nama = $request->get('nama');
+        $data->no_telp = $request->get('no_telp');
+        $data->alamat = $request->get('alamat');
+        $data->nama_sales = $request->get('nama_sales');
+        $data->no_rekening = $request->get('no_rekening');
+        $data->save();
+
+        return redirect()->route('supplier.index')->with('success', 'Data has been successfully added.');
     }
 
     /**
