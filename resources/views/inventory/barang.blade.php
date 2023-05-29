@@ -3,56 +3,55 @@
 @section('title', 'List Produk Page')
 
 @section('konten')
-    <div class="container">
 
-        <h2>Barang</h2>
-        <p>List Barang</p>
+    <h2>Barang</h2>
+    <p>List Barang</p>
 
-        <a data-target="#modalcreate" data-toggle="modal" class="btn btn-info">+ Barang Baru</a>
+    <a data-target="#modalcreate" data-toggle="modal" class="btn btn-info">+ Barang Baru</a>
 
-        <div class="modal fade" id="modalcreate" tabindex="-1" role="basic" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                        <h4 class="modal-title">Add New Barang</h4>
-                    </div>
-                    <form role="form" method="POST" action="{{ route('barang.store') }}">
-                        @csrf
-                        <div class="modal-body">
-                            <div class="form-body">
-                                <div class="form-group">
-                                    <label>Nama</label>
-                                    <input type="text" class="form-control" id="nama" name="nama">
-                                </div>
-                                <div class="form-group">
-                                    <label>Stok</label>
-                                    <input type="text" class="form-control" id="stok" name="stok">
-                                </div>
-                                <div class="form-group">
-                                    <label>Harga Jual</label>
-                                    <input type="text" class="form-control" id="harga_jual" name="harga_jual">
-                                </div>
-                                <div class="form-group">
-                                    <label>HPP</label>
-                                    <input type="text" class="form-control" id="hpp" name="hpp">
-                                </div>
-                                <div class="form-group">
-                                    <label>Barcode</label>
-                                    <input type="text" class="form-control" id="barcode" name="barcode">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <div class="form-actions">
-                                <button type="submit" class="btn btn-primary">Submit</button>
-                                <a href="{{ url('barang') }}" class="btn btn-default" data-dismiss="modal">Cancel</a>
-                            </div>
-                        </div>
-                    </form>
+    <div class="modal fade" id="modalcreate" tabindex="-1" role="basic" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                    <h4 class="modal-title">Add New Barang</h4>
                 </div>
+                <form role="form" method="POST" action="{{ route('barang.store') }}">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="form-body">
+                            <div class="form-group">
+                                <label>Nama</label>
+                                <input type="text" class="form-control" id="nama" name="nama">
+                            </div>
+                            <div class="form-group">
+                                <label>Stok</label>
+                                <input type="text" class="form-control" id="stok" name="stok">
+                            </div>
+                            <div class="form-group">
+                                <label>Harga Jual</label>
+                                <input type="text" class="form-control" id="harga_jual" name="harga_jual">
+                            </div>
+                            <div class="form-group">
+                                <label>HPP</label>
+                                <input type="text" class="form-control" id="hpp" name="hpp">
+                            </div>
+                            <div class="form-group">
+                                <label>Barcode</label>
+                                <input type="text" class="form-control" id="barcode" name="barcode">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                            <a href="{{ url('barang') }}" class="btn btn-default" data-dismiss="modal">Cancel</a>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
+    </div>
     </div>
 
     <br>
@@ -85,14 +84,12 @@
         </tbody>
     </table>
 
-        <div class="modal fade" id="modalEdit" tabindex="-1" role="basic" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content" id="modalContent">
-                    {{-- @include('inventory.getEditForm') --}}
-                </div>
+    <div class="modal fade" id="modalEdit" tabindex="-1" role="basic" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content" id="modalContent">
+                {{-- @include('inventory.getEditForm') --}}
             </div>
         </div>
-
     </div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

@@ -6,6 +6,8 @@ use App\Http\Controllers\NotaBeliController;
 use App\Http\Controllers\NotaJualController;
 use App\Http\Controllers\ReturController;
 use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\MetodePembayaranController;
+use App\Models\MetodePembayaran;
 use App\Models\NotaBeli;
 
 /*
@@ -34,6 +36,7 @@ Route::resource('supplier', SupplierController::class);
 Route::resource('retur', ReturController::class);
 Route::resource('pembelian', NotaBeliController::class);
 Route::resource('penjualan', NotaJualController::class);
+Route::resource('metode_pembayaran', MetodePembayaranController::class);
 
 
 

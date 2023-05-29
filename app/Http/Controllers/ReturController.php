@@ -13,7 +13,7 @@ class ReturController extends Controller
     public function index()
     {
         $returs = Retur::all();
-        return view('administration.returs', compact('returs'));
+        return view('administration.retur', compact('returs'));
     }
 
     /**

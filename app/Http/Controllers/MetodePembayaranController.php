@@ -12,7 +12,8 @@ class MetodePembayaranController extends Controller
      */
     public function index()
     {
-        //
+        $pembayarans = MetodePembayaran::all();
+        return view('administration.pembayaran', compact('pembayarans'));
     }
 
     /**

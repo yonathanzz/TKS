@@ -494,6 +494,9 @@ License: You must have a valid license purchased only from themeforest(the above
 						<li>
 							<a href="{{@url('supplier')}}">Supplier</a>
 						</li>
+                        <li>
+							<a href="{{@url('metode_pembayaran')}}">Metode Pembayaran</a>
+						</li>
 
 					</ul>
 					</a>
@@ -508,7 +511,7 @@ License: You must have a valid license purchased only from themeforest(the above
 							<a href="{{@url('pembelian')}}">Pembelian</a>
 						</li>
 						<li>
-							<a href="{{@url('retur')}}">Penjualan</a>
+							<a href="{{@url('penjualan')}}">Penjualan</a>
 						</li>
                         <li>
 							<a href="{{@url('retur')}}">Retur</a>

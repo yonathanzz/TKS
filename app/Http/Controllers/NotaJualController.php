@@ -13,6 +13,8 @@ class NotaJualController extends Controller
     public function index()
     {
         //
+        $penjualans = NotaJual::all();
+        return view('transaksi.penjualan', compact('penjualans'));
     }
 
     /**
