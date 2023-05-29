@@ -1,12 +1,12 @@
 @extends('layout.conquer')
 
-@section('title', 'List Supplier Page')
+@section('title', 'Nota Beli Page')
 
 @section('konten')
-    <h2>Supplier</h2>
-    <p>List Supplier</p>
+    <h2>Nota Pembelian</h2>
+    <p>List Pembelian</p>
 
-    <a data-target="#modalcreate" data-toggle="modal" class="btn btn-info">+ Supplier Baru</a>
+    {{-- <a data-target="#modalcreate" data-toggle="modal" class="btn btn-info">+ Supplier Baru</a>
     <div class="modal fade" id="modalcreate" tabindex="-1" role="basic" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -49,31 +49,32 @@
                 </form>
             </div>
         </div>
-    </div>
+    </div> --}}
 
     <table class="table">
         <thead>
             <tr>
                 <th>ID</th>
+                <th>Tanggal</th>
                 <th>Nama Supplier</th>
-                <th>No Telp</th>
-                <th>Alamat</th>
-                <th>Nama Sales</th>
-                <th>No Rekening</th>
-                <th>Update</th>
+                <th>Total Bayar</th>
+                <th>Status</th>
+                <th>Tanggal Pembayaran</th>
+                <th>Tanggal Jatuh Tempo</th>
             </tr>
         </thead>
         <tbody>
-            @foreach ($suppliers as $s)
+            @foreach ($notabelis as $n)
                 <tr>
-                    <td>{{ $s->id }}</td>
-                    <td>{{ $s->nama }}</td>
-                    <td>{{ $s->no_telp }} Pcs</td>
-                    <td>{{ $s->alamat }}</td>
-                    <td>{{ $s->nama_sales }}</td>
-                    <td>{{ $s->no_rekening }}</td>
+                    <td>{{ $n->id }}</td>
+                    <td>{{ $n->tanggal }}</td>
+                    <td>{{ $n->supplier->nama }}</td>
+                    <td>{{ $n->total_bayar }}</td>
+                    <td>{{ $n->status }}</td>
+                    <td>{{ $n->tanggal_pembayaran }}</td>
+                    <td>{{ $n->tanggal_jatuh_tempo }}</td>
                     <td><a class='btn btn-xs btn-warning' data-toggle='modal' href='#modalEdit'
-                            onclick='getEditForm({{ $s->id }})'>+ Edit</a></td>
+                            onclick='getEditForm({{ $n->id }})'>+ Edit</a></td>
                 </tr>
             @endforeach
         </tbody>

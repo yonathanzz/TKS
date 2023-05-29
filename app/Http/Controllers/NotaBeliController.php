@@ -13,6 +13,8 @@ class NotaBeliController extends Controller
     public function index()
     {
         //
+        $notabelis = NotaBeli::all();
+        return view('transaksi.pembelian', compact('notabelis'));
     }
 
     /**

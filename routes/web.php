@@ -2,8 +2,11 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BarangController;
+use App\Http\Controllers\NotaBeliController;
+use App\Http\Controllers\NotaJualController;
 use App\Http\Controllers\ReturController;
 use App\Http\Controllers\SupplierController;
+use App\Models\NotaBeli;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,6 +32,8 @@ Route::post('/barang/getEditForm', 'BarangController@getEditForm')->name('barang
 Route::resource('barang', BarangController::class);
 Route::resource('supplier', SupplierController::class);
 Route::resource('retur', ReturController::class);
+Route::resource('pembelian', NotaBeliController::class);
+Route::resource('penjualan', NotaJualController::class);
 
 
 

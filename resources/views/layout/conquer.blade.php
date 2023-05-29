@@ -488,13 +488,29 @@ License: You must have a valid license purchased only from themeforest(the above
 				<li>
 					<a href="/">
 					<i class="icon-user"></i>
-					<span class="title">Administration</span>
+					<span class="title">Administrasi</span>
 					<span class="arrow"></span>
 					<ul class="sub-menu">
 						<li>
 							<a href="{{@url('supplier')}}">Supplier</a>
 						</li>
+
+					</ul>
+					</a>
+				</li>
+                <li>
+					<a href="/">
+					<i class="icon-basket"></i>
+					<span class="title">Transaksi</span>
+					<span class="arrow"></span>
+					<ul class="sub-menu">
 						<li>
+							<a href="{{@url('pembelian')}}">Pembelian</a>
+						</li>
+						<li>
+							<a href="{{@url('retur')}}">Penjualan</a>
+						</li>
+                        <li>
 							<a href="{{@url('retur')}}">Retur</a>
 						</li>
 					</ul>
@@ -503,17 +519,17 @@ License: You must have a valid license purchased only from themeforest(the above
 				<li >
 					<a href="javascript:;">
 					<i class="icon-briefcase"></i>
-					<span class="title">Inventory</span>
+					<span class="title">Inventori</span>
 					<span class="arrow "></span>
 					</a>
 					<ul class="sub-menu">
 						<li>
 							<a href="{{ @url('barang') }}">
-							Products</a>
+							Produk</a>
 						</li>
 						<li>
 							<a href="table_responsive.html">
-							Product Variant</a>
+							Kategori Produk</a>
 						</li>
 						<li>
 							<a href="table_managed.html">
