@@ -1,10 +1,12 @@
 @extends('layout.conquer')
-
 @section('title', 'List Supplier Page')
 
 @section('konten')
     <h2>Supplier</h2>
     <p>List Supplier</p>
+    @if(session('status'))
+        <div class="alert alert-success">{{session('status')}}</div>
+    @endif
 
     <a data-target="#modalcreate" data-toggle="modal" class="btn btn-info">+ Supplier Baru</a>
     <div class="modal fade" id="modalcreate" tabindex="-1" role="basic" aria-hidden="true">
@@ -72,8 +74,7 @@
                     <td>{{ $s->alamat }}</td>
                     <td>{{ $s->nama_sales }}</td>
                     <td>{{ $s->no_rekening }}</td>
-                    <td><a class='btn btn-xs btn-warning' data-toggle='modal' href='#modalEdit'
-                            onclick='getEditForm({{ $s->id }})'>+ Edit</a></td>
+                    <td><a class='btn btn-xs btn-warning' href="{{route('supplier.edit',$s->id)}}">+ Edit</a></td>
                 </tr>
             @endforeach
         </tbody>

@@ -73,8 +73,7 @@
                     <td>{{ $n->status }}</td>
                     <td>{{ $n->tanggal_pembayaran }}</td>
                     <td>{{ $n->tanggal_jatuh_tempo }}</td>
-                    <td><a class='btn btn-xs btn-warning' data-toggle='modal' href='#modalEdit'
-                            onclick='getEditForm({{ $n->id }})'>+ Edit</a></td>
+                    <td><a class='btn btn-xs btn-warning' href="{{route('pembelian.edit', $n->id)}}">+ Edit</a></td>
                 </tr>
             @endforeach
         </tbody>

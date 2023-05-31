@@ -50,18 +50,29 @@ class SupplierController extends Controller
 
     /**
      * Show the form for editing the specified resource.
+     *
      */
-    public function edit(Supplier $supplier)
+    public function edit($id)
     {
-        //
+        $obj = Supplier::find($id);
+        $suppliers = $obj;
+        return view('administration.supplierEdit',compact('suppliers'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Supplier $supplier)
+    public function update(Request $request,$id)
     {
-        //
+        $obj = Supplier::find($id);
+        $obj->nama = $request->get('nama');
+        $obj->no_telp = $request->get('no_telp');
+        $obj->alamat = $request->get('alamat');
+        $obj->nama_sales = $request->get('nama_sales');
+        $obj->no_rekening = $request->get('no_rekening');
+        $obj->save();
+
+        return redirect()->route('supplier.index')->with('status','Your Supplier is already up-to-date');
     }
 
     /**

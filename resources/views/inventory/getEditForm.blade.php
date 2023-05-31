@@ -1,18 +1,17 @@
-
-<form role="form" action="POST" action="{{url('barang/'.$data->id)}}">
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-        <h4 class="modal-title">Edit Supplier</h4>
-    </div>
-    <div class="modal-body">
-        @csrf
-        @method('PUT')
-        <div class="form-body">
-            <div class="form-group">
-                <label>Nama</label>
-                <input type="text" class="form-control" id="nama" name="nama" value="{{ $data->nama }}">
-            </div>
+<div class="modal" id="myModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Modal Title</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
+        <div class="modal-body">
+          <p>Modal content goes here...</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
     </div>
-</form>
-
+  </div>

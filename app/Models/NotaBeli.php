@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class NotaBeli extends Model
 {
     use HasFactory;
-
+    public $timestamps = false;
     public function supplier(){
         return $this->belongsTo(Supplier::class, 'supplier_id', 'id');
     }
