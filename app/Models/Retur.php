@@ -8,4 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class Retur extends Model
 {
     use HasFactory;
+    public function nota_beli()
+    {
+        return $this->belongsTo(NotaBeli::class);
+    }
+    public function barang()
+    {
+        return $this->belongsTo(Barang::class);
+    }
 }

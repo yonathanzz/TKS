@@ -85,13 +85,13 @@
         </tbody>
     </table>
 
-    <div class="modal fade" id="modalEdit" tabindex="-1" role="basic" aria-hidden="true">
+    {{-- <div class="modal fade" id="modalEdit" tabindex="-1" role="basic" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content" id="modalContent">
-                {{-- @include('inventory.getEditForm') --}}
+                @include('inventory.getEditForm')
             </div>
         </div>
-    </div>
+    </div> --}}
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>

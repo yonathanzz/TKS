@@ -22,5 +22,9 @@ class Barang extends Model
         return $this->belongsToMany(StockOpname::class, 'barangs_stock_opnames', 'barang_id', 'stock_opname_id')
         ->withPivot('stok_real', 'stok_sistem', 'deskripsi');
     }
+    public function returs()
+    {
+        return $this->hasMany(Retur::class);
+    }
 
 }

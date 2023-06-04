@@ -43,17 +43,24 @@ class MetodePembayaranController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(MetodePembayaran $metodePembayaran)
+    public function edit(String $id)
     {
         //
+        $pembayaran = MetodePembayaran::find($id);
+        return view('administration.pembayaranEdit',compact('pembayaran'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, MetodePembayaran $metodePembayaran)
+    public function update(Request $request, String $id)
     {
         //
+        $obj = MetodePembayaran::find($id);
+        $obj->nama = $request->get('nama');
+        $obj->save();
+
+        return redirect()->route('metode_pembayaran.index')->with('status','Your data is already up-to-date');
     }
 
     /**

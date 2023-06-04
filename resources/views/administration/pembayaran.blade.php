@@ -12,6 +12,7 @@
             <tr>
                 <th>ID</th>
                 <th>Nama Metode</th>
+                <th>Update</th>
             </tr>
         </thead>
         <tbody>
@@ -19,8 +20,7 @@
                 <tr>
                     <td>{{ $p->id }}</td>
                     <td>{{ $p->nama }}</td>
-                    <td><a class='btn btn-xs btn-warning' data-toggle='modal' href='#modalEdit'
-                            onclick='getEditForm({{ $p->id }})'>+ Edit</a></td>
+                    <td><a class='btn btn-xs btn-warning' href="{{route('metode_pembayaran.edit', $p->id)}}">+ Edit</a></td>
                 </tr>
             @endforeach
         </tbody>

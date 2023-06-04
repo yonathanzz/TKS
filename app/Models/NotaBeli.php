@@ -16,5 +16,8 @@ class NotaBeli extends Model
         return $this->belongsToMany(Barang::class, 'detail_nota_belis', 'nota_beli_id', 'barang_id')
         ->withPivot('jumlah', 'harga_beli', 'status');
     }
-
+    public function returs()
+    {
+        return $this->hasMany(Retur::class);
+    }
 }

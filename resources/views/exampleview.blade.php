@@ -2,25 +2,7 @@
 @extends('layout.conquer')
 
 @section('konten')
-<div class="modal fade" id="portlet-config" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                <h4 class="modal-title">Modal title</h4>
-            </div>
-            <div class="modal-body">
-                Widget settings form goes here
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-success">Save changes</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-        <!-- /.modal-content -->
-    </div>
-    <!-- /.modal-dialog -->
-</div>
+
 <!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 <!-- BEGIN STYLE CUSTOMIZER -->
 <div class="theme-panel hidden-xs hidden-sm">
@@ -90,7 +72,7 @@
 <!-- END BEGIN STYLE CUSTOMIZER -->
 <!-- BEGIN PAGE HEADER-->
 <h3 class="page-title">
-    Dashboard <small>statistics and more</small>
+    Dashboard <small>Toko Karya Sejahtera</small>
 </h3>
 <div class="page-bar">
     <ul class="page-breadcrumb">
@@ -111,6 +93,7 @@
         </div>
     </div>
 </div>
+<img src="{{ asset('conquer/img/logo.jpg') }}" alt="" style="max-width:100%; height:auto;">
 <!-- END PAGE HEADER-->
 <!-- BEGIN OVERVIEW STATISTIC BARS-->
 <div class="row stats-overview-cont"></div>

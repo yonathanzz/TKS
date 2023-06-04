@@ -9,6 +9,48 @@
 
     <a data-target="#modalcreate" data-toggle="modal" class="btn btn-info">+ Retur Baru</a>
 
+    <div class="modal fade" id="modalcreate" tabindex="-1" role="basic" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                    <h4 class="modal-title">Add New Barang</h4>
+                </div>
+                <form role="form" method="POST" action="{{ route('retur.store') }}">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="form-body">
+                            <div class="form-group">
+                                <label>Tanggal Retur</label>
+                                <input type="date" class="form-control" id="tanggal_retur" name="tanggal_retur">
+                            </div>
+                            <div class="form-group">
+                                <label>Jumlah</label>
+                                <input type="number" class="form-control" id="jumlah" name="jumlah">
+                            </div>
+                            <div class="form-group">
+                                <label>ID Barang</label>
+                                <input type="text" class="form-control" id="idBarang" name="idBarang">
+                            </div>
+                            <div class="form-group">
+                                <label>ID Nota Beli</label>
+                                <input type="text" class="form-control" id="idNota" name="idNota">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                            <a href="{{ url('retur') }}" class="btn btn-default" data-dismiss="modal">Cancel</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <br>
+
     <table class="table">
         <thead>
             <tr>
@@ -17,6 +59,7 @@
                 <th>Jumlah</th>
                 <th>Nama Barang</th>
                 <th>ID Nota</th>
+                <th>Update</th>
             </tr>
         </thead>
         <tbody>

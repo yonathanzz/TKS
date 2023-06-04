@@ -30,6 +30,14 @@ class ReturController extends Controller
     public function store(Request $request)
     {
         //
+        $data = new Retur();
+        $data->tanggal_retur = $request->get('tanggal_retur');
+        $data->jumlah = $request->get('jumlah');
+        $data->barang_id = $request->get('idBarang');
+        $data->nota_beli_id = $request->get('idNotaBeli');
+        $data->save();
+
+        return redirect()->route('retur.index')->with('success', 'Data has been successfully added.');
     }
 
     /**
