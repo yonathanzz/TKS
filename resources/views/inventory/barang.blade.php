@@ -7,6 +7,9 @@
     <h2>Barang</h2>
     <p>List Barang</p>
 
+    @if(session('status'))
+        <div class="alert alert-success">{{session('status')}}</div>
+    @endif
     <a data-target="#modalcreate" data-toggle="modal" class="btn btn-info">+ Barang Baru</a>
 
     <div class="modal fade" id="modalcreate" tabindex="-1" role="basic" aria-hidden="true">
@@ -76,8 +79,7 @@
                     <td>Rp. {{ $b->harga_jual }}</td>
                     <td>Rp. {{ $b->hpp }}</td>
                     <td>{{ $b->barcode }}</td>
-                    <td><a class='btn btn-xs btn-warning' data-toggle='modal' href='#modalEdit'
-                            onclick='getEditForm({{ $b->id }})'>+ Edit</a></td>
+                    <td><a class='btn btn-xs btn-warning' href="{{route('barang.edit', $b->id)}}">+ Edit</a></td>
                 </tr>
             @endforeach
         </tbody>

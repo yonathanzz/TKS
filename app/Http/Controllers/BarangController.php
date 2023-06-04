@@ -57,6 +57,8 @@ class BarangController extends Controller
     public function edit(string $id)
     {
         //
+        $barang = Barang::find($id);
+        return view('inventory.barangEdit',compact('barang'));
     }
 
     /**
@@ -65,6 +67,15 @@ class BarangController extends Controller
     public function update(Request $request, string $id)
     {
         //
+        $obj = Barang::find($id);
+        $obj->nama = $request->get('nama');
+        $obj->stok = $request->get('stok');
+        $obj->harga_jual = $request->get('harga_jual');
+        $obj->hpp = $request->get('hpp');
+        $obj->barcode = $request->get('barcode');
+        $obj->save();
+
+        return redirect()->route('barang.index')->with('status','Your data is already up-to-date');
     }
 
     /**
