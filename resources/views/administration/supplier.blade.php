@@ -70,7 +70,7 @@
                 <tr>
                     <td>{{ $s->id }}</td>
                     <td>{{ $s->nama }}</td>
-                    <td>{{ $s->no_telp }} Pcs</td>
+                    <td>{{ $s->no_telp }}</td>
                     <td>{{ $s->alamat }}</td>
                     <td>{{ $s->nama_sales }}</td>
                     <td>{{ $s->no_rekening }}</td>

@@ -2,11 +2,15 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BarangController;
+use App\Http\Controllers\DetailNotaBeliController;
+use App\Http\Controllers\DetailNotaJualController;
 use App\Http\Controllers\NotaBeliController;
 use App\Http\Controllers\NotaJualController;
 use App\Http\Controllers\ReturController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\MetodePembayaranController;
+use App\Models\DetailNotaBeli;
+use App\Models\DetailNotaJual;
 use App\Models\MetodePembayaran;
 use App\Models\NotaBeli;
 
@@ -31,11 +35,15 @@ Route::get('/barang', function () {
 
 Route::post('/barang/getEditForm', 'BarangController@getEditForm')->name('barang.getEditForm');
 
+Route::get('/detailNotaBeli/{notaID}/products', [DetailNotaBeliController::class, 'productsFromNota'])->name('detailNotaBeli.productsFromNota');
+
 Route::resource('barang', BarangController::class);
 Route::resource('supplier', SupplierController::class);
 Route::resource('retur', ReturController::class);
 Route::resource('pembelian', NotaBeliController::class);
+Route::resource('detailNotaBeli', DetailNotaBeliController::class);
 Route::resource('penjualan', NotaJualController::class);
+Route::resource('detailNotaJual', DetailNotaJualController::class);
 Route::resource('metode_pembayaran', MetodePembayaranController::class);
 
 

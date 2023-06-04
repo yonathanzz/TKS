@@ -61,6 +61,8 @@
                 <th>Status</th>
                 <th>Tanggal Pembayaran</th>
                 <th>Tanggal Jatuh Tempo</th>
+                <th>Update</th>
+                <th>Detail Nota</th>
             </tr>
         </thead>
         <tbody>
@@ -74,6 +76,7 @@
                     <td>{{ $n->tanggal_pembayaran }}</td>
                     <td>{{ $n->tanggal_jatuh_tempo }}</td>
                     <td><a class='btn btn-xs btn-warning' href="{{route('pembelian.edit', $n->id)}}">+ Edit</a></td>
+                    <td><a href="{{route('detailNotaBeli.productsFromNota', $n->id)}}" class="btn btn-xs btn-success">Detail</a></td>
                 </tr>
             @endforeach
         </tbody>

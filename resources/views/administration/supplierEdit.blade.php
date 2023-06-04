@@ -4,7 +4,8 @@
 @section('konten')
 <form role="form" method="POST" action="{{route('supplier.update',$suppliers->id)}}">
     <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+        {{-- <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button> --}}
+        <a href="{{url('supplier')}}" class="close"></a>
         <h4 class="modal-title">Edit Supplier</h4>
     </div>
     <div class="modal-body">
