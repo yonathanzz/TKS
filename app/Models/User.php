@@ -16,4 +16,9 @@ class User extends Model
     public function stock_opnames(){
         return $this->hasMany(StockOpname::class, 'user_id');
     }
+
+    public function barangs(){
+        return $this->belongsToMany(Barang::class, 'carts', 'users_id', 'barangs_id')
+        ->withPivot('jumlah', 'harga');
+    }
 }

@@ -79,7 +79,11 @@
                     <td>Rp. {{ $b->harga_jual }}</td>
                     <td>Rp. {{ $b->hpp }}</td>
                     <td>{{ $b->barcode }}</td>
-                    <td><a class='btn btn-xs btn-warning' href="{{route('barang.edit', $b->id)}}">+ Edit</a></td>
+                    <td>
+                        <a class='btn btn-xs btn-warning' href="{{route('barang.edit', $b->id)}}">+ Edit</a>
+                        <a class="btn btn-xs btn-info">+ Cart</a>
+                    </td>
+
                 </tr>
             @endforeach
         </tbody>
