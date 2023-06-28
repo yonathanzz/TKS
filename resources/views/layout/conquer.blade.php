@@ -64,7 +64,7 @@ License: You must have a valid license purchased only from themeforest(the above
             <!-- BEGIN LOGO -->
             <div class="page-logo">
                 <a href="/">
-                    <img src="{{ asset('conquer/img/logo.png') }}" alt="logo" />
+                    {{-- <img src="{{ asset('conquer/img/logo.png') }}" alt="logo" /> --}}
                 </a>
             </div>
             <form class="search-form search-form-header" role="form" action="index.html">
@@ -483,7 +483,7 @@ License: You must have a valid license purchased only from themeforest(the above
     <!-- BEGIN FOOTER -->
     <div class="footer">
         <div class="footer-inner">
-            2013 &copy; Conquer by keenthemes.
+            Toko Karya Sejahtera
         </div>
         <div class="footer-tools">
             <span class="go-top">
