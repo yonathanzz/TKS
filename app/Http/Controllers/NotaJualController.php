@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Barang;
+use App\Models\MetodePembayaran;
 use App\Models\NotaJual;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class NotaJualController extends Controller
@@ -23,6 +26,10 @@ class NotaJualController extends Controller
     public function create()
     {
         //
+        $barangs = Barang::all();
+        $users = User::all();
+        $metode_pembayarans = MetodePembayaran::all();
+        return view('transaksi.createPenjualan', compact('barangs', 'users', 'metode_pembayarans'));
     }
 
     /**
@@ -63,5 +70,26 @@ class NotaJualController extends Controller
     public function destroy(NotaJual $notaJual)
     {
         //
+    }
+
+    public function createPenjualan(){
+
+    }
+    public function addToCart($id){
+        $b = Barang::find($id);
+
+        $cart = session()->get('cart');
+        if(!isset($cart[$id])){
+            $cart[$id] = [
+                "name" => $b->nama,
+                "quantity" => 1,
+                "price" => $b->harga_jual
+
+            ];
+        }else{
+            $cart[$id]["quantity"]++;
+        }
+        session()->put('cart',$cart);
+        return redirect()->back()->with('success', 'barang berhasil ditambahkan ke nota');
     }
 }

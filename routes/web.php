@@ -46,6 +46,6 @@ Route::resource('penjualan', NotaJualController::class);
 Route::resource('detailNotaJual', DetailNotaJualController::class);
 Route::resource('metode_pembayaran', MetodePembayaranController::class);
 
-
+route::get('/createPenjualan', [NotaJualController::class, 'createPenjualan'])->name('notajual.createPenjualan');
 
 // Route::post('/login', 'LoginController@login')->name('login');

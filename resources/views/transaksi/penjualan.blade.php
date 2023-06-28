@@ -50,7 +50,7 @@
             </div>
         </div>
     </div> --}}
-
+    <a class='btn btn-info' href="{{route('penjualan.create')}}">+ Penjualan</a>
     <table class="table">
         <thead>
             <tr>
