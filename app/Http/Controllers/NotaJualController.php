@@ -51,17 +51,31 @@ class NotaJualController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(NotaJual $notaJual)
+    public function edit(string $id)
     {
         //
+        $notajual = NotaJual::find($id);
+        $selUser = $notajual->user;
+        $users = User::all();
+        $selMetpem = $notajual->metode_pembayaran;
+        $metpems = MetodePembayaran::all();
+        return view('transaksi.notaJualEdit',compact('notajual', 'selUser','users', 'selMetpem','metpems'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, NotaJual $notaJual)
+    public function update(Request $request, $id)
     {
         //
+        $notajual = NotaJual::find($id);
+        $notajual->tanggal_waktu = $notajual->tanggal_waktu;
+        $notajual->total_bayar = $request->get('total_bayar');
+        $notajual->user_id = $request->get('user_id');
+        $notajual->metode_pembayaran_id = $request->get('metode_pembayaran_id');
+        $notajual->save();
+
+        return redirect()->route('penjualan.index')->with('status','Your data is already up-to-date');
     }
 
     /**
