@@ -62,6 +62,8 @@
                 <th>Total Bayar</th>
                 <th>Nama Kasir</th>
                 <th>Metode Pembayaran</th>
+                <th>Update</th>
+                <th>Detail Nota</th>
             </tr>
         </thead>
         <tbody>
@@ -74,6 +76,7 @@
                     <td>{{ $n->metode_pembayaran->nama }}</td>
                     <td><a class='btn btn-xs btn-warning' data-toggle='modal' href='#modalEdit'
                             onclick='getEditForm({{ $n->id }})'>+ Edit</a></td>
+                    <td><a href="{{route('detailNotaJual.productsFromNota', $n->id)}}" class="btn btn-xs btn-success">Detail</a></td>
                     <td>
                         <form method="POST" action="{{ route('penjualan.destroy', $n->id) }}">
                             @csrf

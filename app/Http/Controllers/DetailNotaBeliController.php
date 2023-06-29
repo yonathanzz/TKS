@@ -65,8 +65,8 @@ class DetailNotaBeliController extends Controller
     }
 
     public function productsFromNota($notaID){
-        $nota = NotaBeli::find($notaID);
-        $barangs = $nota->barangs;
-        return view('transaksi.detailNotaBeli', compact('barangs'));
+        $nota = NotaBeli::with('barangs')->find($notaID);
+
+        return view('transaksi.detailNotaBeli', compact('nota'));
     }
 }

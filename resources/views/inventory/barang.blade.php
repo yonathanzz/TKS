@@ -58,6 +58,11 @@
 
     <br>
 
+    <form action="{{ route('barang.search') }}" method="GET">
+        <input type="text" name="query" placeholder="Search products...">
+        <button type="submit">Search</button>
+    </form>
+
     <table class="table">
         <thead>
             <tr>
@@ -81,7 +86,6 @@
                     <td>{{ $b->barcode }}</td>
                     <td>
                         <a class='btn btn-xs btn-warning' href="{{ route('barang.edit', $b->id) }}">+ Edit</a>
-                        <a class="btn btn-xs btn-info">+ Cart</a>
                     <td>
                         <form method="POST" action="{{ route('barang.destroy', $b->id) }}">
                             @csrf

@@ -36,6 +36,7 @@ Route::get('/barang', function () {
 Route::post('/barang/getEditForm', 'BarangController@getEditForm')->name('barang.getEditForm');
 
 Route::get('/detailNotaBeli/{notaID}/products', [DetailNotaBeliController::class, 'productsFromNota'])->name('detailNotaBeli.productsFromNota');
+Route::get('/detailNotaJual/{notaID}/products', [DetailNotaJualController::class, 'productsFromNota'])->name('detailNotaJual.productsFromNota');
 
 Route::resource('barang', BarangController::class);
 Route::resource('supplier', SupplierController::class);
@@ -49,3 +50,5 @@ Route::resource('metode_pembayaran', MetodePembayaranController::class);
 route::get('/createPenjualan', [NotaJualController::class, 'createPenjualan'])->name('notajual.createPenjualan');
 
 // Route::post('/login', 'LoginController@login')->name('login');
+
+Route::get('/search', [BarangController::class, 'search'])->name('barang.search');

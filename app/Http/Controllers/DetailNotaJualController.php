@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\DetailNotaJual;
+use App\Models\NotaJual;
 use Illuminate\Http\Request;
 
 class DetailNotaJualController extends Controller
@@ -61,5 +62,11 @@ class DetailNotaJualController extends Controller
     public function destroy(DetailNotaJual $detailNotaJual)
     {
         //
+    }
+
+    public function productsFromNota($notaID){
+        $nota = NotaJual::with('barangs')->find($notaID);
+
+        return view('transaksi.detailNotaJual', compact('nota'));
     }
 }

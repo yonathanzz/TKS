@@ -59,7 +59,7 @@ class BarangController extends Controller
     {
         //
         $barang = Barang::find($id);
-        return view('inventory.barangEdit',compact('barang'));
+        return view('inventory.barangEdit', compact('barang'));
     }
 
     /**
@@ -76,7 +76,7 @@ class BarangController extends Controller
         $obj->barcode = $request->get('barcode');
         $obj->save();
 
-        return redirect()->route('barang.index')->with('status','Your data is already up-to-date');
+        return redirect()->route('barang.index')->with('status', 'Your data is already up-to-date');
     }
 
     /**
@@ -84,24 +84,33 @@ class BarangController extends Controller
      */
     public function destroy(string $id)
     {
-        try{
+        try {
             $obj = Barang::find($id);
             $obj->delete();
-            return redirect()->route('barang.index')->with('status','Data berhasil di hapus');
-        }
-        catch(\PDOException $ex){
+            return redirect()->route('barang.index')->with('status', 'Data berhasil di hapus');
+        } catch (\PDOException $ex) {
             $msg = "Data Gagal dihapus";
-            return redirect()->route('barang.index')->with('status',$msg);
+            return redirect()->route('barang.index')->with('status', $msg);
         }
     }
 
     public function getEditForm(Request $request)
     {
-        $id=$request->get('id');
-        $data=Barang::find($id);
+        $id = $request->get('id');
+        $data = Barang::find($id);
         return response()->json([
-            'status'=>'oke',
-            'msg'=>view('inventory.getEditForm', compact('data'))->render()
+            'status' => 'oke',
+            'msg' => view('inventory.getEditForm', compact('data'))->render()
         ], 200);
+    }
+
+    public function search(Request $request)
+    {
+        $query = $request->input('query');
+
+        $barangs = Barang::where('nama', 'LIKE', '%' . $query . '%')
+            ->get();
+
+        return view('inventory.search', compact('barangs', 'query'));
     }
 }
