@@ -29,7 +29,11 @@ class MetodePembayaranController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = new MetodePembayaran();
+        $data->nama = $request->get('nama');
+        $data->save();
+
+        return redirect()->route('metode_pembayaran.index')->with('success', 'Data has been successfully added.');
     }
 
     /**
@@ -66,8 +70,16 @@ class MetodePembayaranController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(MetodePembayaran $metodePembayaran)
+    public function destroy(string $id)
     {
-        //
+        try{
+            $obj = MetodePembayaran::find($id);
+            $obj->delete();
+            return redirect()->route('metode_pembayaran.index')->with('status','Data berhasil di hapus');
+        }
+        catch(\PDOException $ex){
+            $msg = "Data Gagal dihapus";
+            return redirect()->route('metode_pembayaran.index')->with('status',$msg);
+        }
     }
 }

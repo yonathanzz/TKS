@@ -5,51 +5,54 @@
 @section('konten')
     <h2>Nota Pembelian</h2>
     <p>List Pembelian</p>
+    @if(session('status'))
+        <div class="alert alert-success">{{session('status')}}</div>
+    @endif
 
-    {{-- <a data-target="#modalcreate" data-toggle="modal" class="btn btn-info">+ Supplier Baru</a>
+    <a data-target="#modalcreate" data-toggle="modal" class="btn btn-info">+ Pembelian Baru</a>
     <div class="modal fade" id="modalcreate" tabindex="-1" role="basic" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                    <h4 class="modal-title">Add New Supplier</h4>
+                    <h4 class="modal-title">Add New Buying</h4>
                 </div>
-                <form role="form" method="POST" action="{{ route('supplier.store') }}">
+                <form role="form" method="POST" action="{{ route('pembelian.store') }}">
                     @csrf
                     <div class="modal-body">
                         <div class="form-body">
                             <div class="form-group">
-                                <label>Nama</label>
-                                <input type="text" class="form-control" id="nama" name="nama">
+                                <label>Tanggal</label>
+                                <input type="datetime-local" class="form-control" id="tanggal" name="tanggal">
                             </div>
                             <div class="form-group">
-                                <label>No Telp</label>
-                                <input type="text" class="form-control" id="no_telp" name="no_telp">
+                                <label>Nama Supplier</label>
+                                <select name="supplier_id" id="supplier_id">
+                                    @foreach ($suppliers as $s)
+                                    <option value="{{$s->id}}">{{$s->nama}}</option>
+                                    @endforeach
+                                </select>
                             </div>
                             <div class="form-group">
-                                <label>Alamat</label>
-                                <input type="text" class="form-control" id="alamat" name="alamat">
-                            </div>
+                                <label>Total Bayar</label>
+                                <input type="text" class="form-control" id="total_bayar" name="total_bayar">
+                            </div>                           
                             <div class="form-group">
-                                <label>Nama Sales</label>
-                                <input type="text" class="form-control" id="nama_sales" name="nama_sales">
-                            </div>
-                            <div class="form-group">
-                                <label>No Rekening</label>
-                                <input type="text" class="form-control" id="no_rekening" name="no_rekening">
+                                <label>Tanggal Jatuh Tempo</label>
+                                <input type="datetime-local" class="form-control" id="tanggal_jatuh_tempo" name="tanggal_jatuh_tempo">
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <div class="form-actions">
                             <button type="submit" class="btn btn-primary">Submit</button>
-                            <a href="{{ url('supplier') }}" class="btn btn-default" data-dismiss="modal">Cancel</a>
+                            <a href="{{ url('pembelian') }}" class="btn btn-default" data-dismiss="modal">Cancel</a>
                         </div>
                     </div>
                 </form>
             </div>
         </div>
-    </div> --}}
+    </div>
 
     <table class="table">
         <thead>
@@ -77,6 +80,13 @@
                     <td>{{ $n->tanggal_jatuh_tempo }}</td>
                     <td><a class='btn btn-xs btn-warning' href="{{route('pembelian.edit', $n->id)}}">+ Edit</a></td>
                     <td><a href="{{route('detailNotaBeli.productsFromNota', $n->id)}}" class="btn btn-xs btn-success">Detail</a></td>
+                    <td>
+                        <form method="POST" action="{{ route('pembelian.destroy', $n->id) }}">
+                            @csrf
+                            @method('DELETE')
+                            <input type="submit" value="Hapus" class="btn btn-danger"
+                                onclick="return confirm('Apakah anda yakin menghapus data ini? ({{ $n->id }})')">
+                    </td>
                 </tr>
             @endforeach
         </tbody>

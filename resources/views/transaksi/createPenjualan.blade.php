@@ -6,7 +6,7 @@
     <h2>Tambah Penjualan Baru</h2>
     <p></p>
 
-    <form role="form" method="POST" action="{{ route('penjualan.cartpenjualan') }}">
+    <form role="form" method="POST" action="{{ route('penjualan.create') }}">
         @csrf
         <div>
             <label>Nama Kasir</label>

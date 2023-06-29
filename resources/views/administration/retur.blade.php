@@ -22,7 +22,7 @@
                         <div class="form-body">
                             <div class="form-group">
                                 <label>Tanggal Retur</label>
-                                <input type="date" class="form-control" id="tanggal_retur" name="tanggal_retur">
+                                <input type="datetime-local" class="form-control" id="tanggal_retur" name="tanggal_retur">
                             </div>
                             <div class="form-group">
                                 <label>Jumlah</label>
@@ -30,11 +30,19 @@
                             </div>
                             <div class="form-group">
                                 <label>ID Barang</label>
-                                <input type="text" class="form-control" id="idBarang" name="idBarang">
+                                <select name="idBarang" id="idBarang">
+                                    @foreach ($barangs as $b)
+                                    <option value="{{$b->id}}">{{$b->nama}}</option>
+                                    @endforeach
+                                </select>
                             </div>
                             <div class="form-group">
                                 <label>ID Nota Beli</label>
-                                <input type="text" class="form-control" id="idNota" name="idNota">
+                                <select name="idNotaBeli" id="idNotaBeli">
+                                    @foreach ($notabelis as $n)
+                                    <option value="{{$n->id}}">{{$n->id}}</option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
                     </div>

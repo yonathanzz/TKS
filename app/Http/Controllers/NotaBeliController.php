@@ -16,7 +16,8 @@ class NotaBeliController extends Controller
     {
         //
         $notabelis = NotaBeli::all();
-        return view('transaksi.pembelian', compact('notabelis'));
+        $suppliers = Supplier::all();
+        return view('transaksi.pembelian', compact('notabelis','suppliers'));
     }
 
     /**
@@ -32,7 +33,16 @@ class NotaBeliController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = new NotaBeli();
+        $data->tanggal = date('Y-m-d H:i:s', strtotime($request->get('tanggal')));
+        $data->supplier_id = $request->get('supplier_id');
+        $data->total_bayar = $request->get('total_bayar');
+        $data->status = 'diproses';
+        $data->tanggal_pembayaran = date('Y-m-d H:i:s');
+        $data->tanggal_jatuh_tempo = date('Y-m-d H:i:s', strtotime($request->get('tanggal_jatuh_tempo')));
+        $data->save();
+
+        return redirect()->route('pembelian.index')->with('success', 'Data has been successfully added.');
     }
 
     /**
@@ -75,9 +85,17 @@ class NotaBeliController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(NotaBeli $notaBeli)
+    public function destroy(string $id)
     {
-        //
+        try{
+            $obj = NotaBeli::find($id);
+            $obj->delete();
+            return redirect()->route('pembelian.index')->with('status','Data berhasil di hapus');
+        }
+        catch(\PDOException $ex){
+            $msg = "Data Gagal dihapus";
+            return redirect()->route('pembelian.index')->with('status',$msg);
+        }
     }
 
 

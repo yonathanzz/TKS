@@ -75,6 +75,13 @@
                     <td>{{ $s->nama_sales }}</td>
                     <td>{{ $s->no_rekening }}</td>
                     <td><a class='btn btn-xs btn-warning' href="{{route('supplier.edit',$s->id)}}">+ Edit</a></td>
+                    <td>
+                        <form method="POST" action="{{ route('supplier.destroy', $s->id) }}">
+                            @csrf
+                            @method('DELETE')
+                            <input type="submit" value="Hapus" class="btn btn-danger"
+                                onclick="return confirm('Apakah anda yakin menghapus data ini? ({{ $s->nama}})')">
+                    </td>
                 </tr>
             @endforeach
         </tbody>

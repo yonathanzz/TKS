@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Barang;
+use App\Models\NotaBeli;
 use App\Models\Retur;
 use Illuminate\Http\Request;
 
@@ -13,7 +15,9 @@ class ReturController extends Controller
     public function index()
     {
         $returs = Retur::all();
-        return view('administration.retur', compact('returs'));
+        $barangs = Barang::all();
+        $notabelis = NotaBeli::all();
+        return view('administration.retur', compact('returs','barangs','notabelis'));
     }
 
     /**
@@ -67,8 +71,16 @@ class ReturController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Retur $retur)
+    public function destroy(string $id)
     {
-        //
+        try{
+            $obj = Retur::find($id);
+            $obj->delete();
+            return redirect()->route('retur.index')->with('status','Data berhasil di hapus');
+        }
+        catch(\PDOException $ex){
+            $msg = "Data Gagal dihapus";
+            return redirect()->route('retur.index')->with('status',$msg);
+        }
     }
 }

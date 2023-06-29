@@ -5,6 +5,9 @@
 @section('konten')
     <h2>Nota Penjualan</h2>
     <p>List Penjualan</p>
+    @if (session('status'))
+        <div class="alert alert-success">{{ session('status') }}</div>
+    @endif
 
     {{-- <a data-target="#modalcreate" data-toggle="modal" class="btn btn-info">+ Supplier Baru</a>
     <div class="modal fade" id="modalcreate" tabindex="-1" role="basic" aria-hidden="true">
@@ -50,7 +53,7 @@
             </div>
         </div>
     </div> --}}
-    <a class='btn btn-info' href="{{route('penjualan.create')}}">+ Penjualan</a>
+    <a class='btn btn-info' href="{{ route('penjualan.create') }}">+ Penjualan</a>
     <table class="table">
         <thead>
             <tr>
@@ -71,6 +74,13 @@
                     <td>{{ $n->metode_pembayaran->nama }}</td>
                     <td><a class='btn btn-xs btn-warning' data-toggle='modal' href='#modalEdit'
                             onclick='getEditForm({{ $n->id }})'>+ Edit</a></td>
+                    <td>
+                        <form method="POST" action="{{ route('penjualan.destroy', $n->id) }}">
+                            @csrf
+                            @method('DELETE')
+                            <input type="submit" value="Hapus" class="btn btn-danger"
+                                onclick="return confirm('Apakah anda yakin menghapus data ini? ({{ $n->id }})')">
+                    </td>
                 </tr>
             @endforeach
         </tbody>

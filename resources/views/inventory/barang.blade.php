@@ -7,8 +7,8 @@
     <h2>Barang</h2>
     <p>List Barang</p>
 
-    @if(session('status'))
-        <div class="alert alert-success">{{session('status')}}</div>
+    @if (session('status'))
+        <div class="alert alert-success">{{ session('status') }}</div>
     @endif
     <a data-target="#modalcreate" data-toggle="modal" class="btn btn-info">+ Barang Baru</a>
 
@@ -80,8 +80,17 @@
                     <td>Rp. {{ $b->hpp }}</td>
                     <td>{{ $b->barcode }}</td>
                     <td>
-                        <a class='btn btn-xs btn-warning' href="{{route('barang.edit', $b->id)}}">+ Edit</a>
+                        <a class='btn btn-xs btn-warning' href="{{ route('barang.edit', $b->id) }}">+ Edit</a>
                         <a class="btn btn-xs btn-info">+ Cart</a>
+                    <td>
+                        <form method="POST" action="{{ route('barang.destroy', $b->id) }}">
+                            @csrf
+                            @method('DELETE')
+                            <input type="submit" value="Hapus" class="btn btn-danger"
+                                onclick="return confirm('Apakah anda yakin menghapus data ini? ({{ $b->nama }})')">
+                    </td>
+
+                    </form>
                     </td>
 
                 </tr>

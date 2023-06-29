@@ -67,14 +67,19 @@ class NotaJualController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(NotaJual $notaJual)
+    public function destroy(string $id)
     {
-        //
+        try{
+            $obj = NotaJual::find($id);
+            $obj->delete();
+            return redirect()->route('penjualan.index')->with('status','Data berhasil di hapus');
+        }
+        catch(\PDOException $ex){
+            $msg = "Data Gagal dihapus";
+            return redirect()->route('penjualan.index')->with('status',$msg);
+        }
     }
 
-    public function createPenjualan(){
-
-    }
     public function addToCart($id){
         $b = Barang::find($id);
 

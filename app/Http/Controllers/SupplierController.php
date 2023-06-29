@@ -78,8 +78,16 @@ class SupplierController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Supplier $supplier)
+    public function destroy(string $id)
     {
-        //
+        try{
+            $obj = Supplier::find($id);
+            $obj->delete();
+            return redirect()->route('supplier.index')->with('status','Data berhasil di hapus');
+        }
+        catch(\PDOException $ex){
+            $msg = "Data Gagal dihapus";
+            return redirect()->route('supplier.index')->with('status',$msg);
+        }
     }
 }
