@@ -9,7 +9,7 @@ class NotaJual extends Model
 {
     use HasFactory;
     public $timestamps = false;
-    
+
     public function metode_pembayaran(){
         return $this->belongsTo(MetodePembayaran::class, 'metode_pembayaran_id', 'id');
     }
