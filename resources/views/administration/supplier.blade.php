@@ -81,6 +81,7 @@
                             @method('DELETE')
                             <input type="submit" value="Hapus" class="btn btn-danger"
                                 onclick="return confirm('Apakah anda yakin menghapus data ini? ({{ $s->nama}})')">
+                        </form>
                     </td>
                 </tr>
             @endforeach

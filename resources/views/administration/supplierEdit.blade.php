@@ -1,5 +1,5 @@
 @extends('layout.conquer')
-@section('title', 'List Supplier Page')
+@section('title', 'Edit Supplier Page')
 
 @section('konten')
 <form role="form" method="POST" action="{{route('supplier.update',$suppliers->id)}}">

@@ -80,6 +80,14 @@
                     <td>{{ $r->nota_beli_id }}</td>
                     <td><a class='btn btn-xs btn-warning' data-toggle='modal' href='#modalEdit'
                             onclick='getEditForm({{ $r->id }})'>+ Edit</a></td>
+                    <td>
+                        <form method="POST" action="{{ route('retur.destroy', $r->id) }}">
+                            @csrf
+                            @method('DELETE')
+                            <input type="submit" value="Hapus" class="btn btn-danger"
+                                onclick="return confirm('Apakah anda yakin menghapus data ini? ({{ $r->nama}})')">
+                        </form>
+                    </td>
                 </tr>
             @endforeach
         </tbody>

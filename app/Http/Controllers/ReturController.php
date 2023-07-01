@@ -55,17 +55,29 @@ class ReturController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Retur $retur)
+    public function edit(string $id)
     {
-        //
+        $returs = Retur::find($id);
+        $idbarang = $returs->barang_id;
+        $nota_beli_id = $returs->nota_beli_id;
+        $barangs = Barang::all();
+        $notabelis = NotaBeli::all();
+        return view('administration.returEdit', compact('returs','barangs','notabelis','nota_beli_id','idbarang'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Retur $retur)
+    public function update(Request $request, string $id)
     {
-        //
+        $data = Retur::find($id);
+        $data->tanggal_retur = $request->get('tanggal_retur');
+        $data->jumlah = $request->get('jumlah');
+        $data->barang_id = $request->get('idBarang');
+        $data->nota_beli_id = $request->get('idNotaBeli');
+        $data->save();
+
+        return redirect()->route('retur.index')->with('success', 'Data has been successfully added.');
     }
 
     /**
