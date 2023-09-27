@@ -26,6 +26,9 @@ class NotaBeliController extends Controller
     public function create()
     {
         //
+        $barangs = Barang::all();
+        $suppliers = Supplier::all();
+        return view('transaksi.createpembelian', compact('suppliers', 'barangs'));
     }
 
     /**

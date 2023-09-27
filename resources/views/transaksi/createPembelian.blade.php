@@ -1,16 +1,10 @@
 @extends('layout.conquer')
 
-@section('title', 'Nota Beli Page')
+@section('title', 'Tambah Pembelian')
 
 @section('konten')
-    <h2>Nota Pembelian</h2>
-    <p>List Pembelian</p>
-    @if(session('status'))
-        <div class="alert alert-success">{{session('status')}}</div>
-    @endif
 
-    <a href="{{ route('pembelian.create') }}" class="btn btn-info">+ Pembelian Baru</a>
-    {{-- <div class="modal fade" id="modalcreate" tabindex="-1" role="basic" aria-hidden="true">
+    <div class="modal fade" id="modalcreate" tabindex="-1" role="basic" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -52,45 +46,48 @@
                 </form>
             </div>
         </div>
-    </div> --}}
+    </div>
+
+    <form action="{{ route('barang.search') }}" method="GET">
+        <input type="text" name="query" placeholder="Search products...">
+        <button type="submit">Search</button>
+    </form>
 
     <table class="table">
         <thead>
             <tr>
                 <th>ID</th>
-                <th>Tanggal</th>
-                <th>Nama Supplier</th>
-                <th>Total Bayar</th>
-                <th>Status</th>
-                <th>Tanggal Pembayaran</th>
-                <th>Tanggal Jatuh Tempo</th>
-                <th>Update</th>
-                <th>Detail Nota</th>
+                <th>Nama Barang</th>
+                <th>Stok</th>
+                <th>Harga Jual</th>
+                <th>HPP</th>
+                <th>Barcode</th>
+                <th>Beli</th>
             </tr>
         </thead>
         <tbody>
-            @foreach ($notabelis as $n)
+            @foreach ($barangs as $b)
                 <tr>
-                    <td>{{ $n->id }}</td>
-                    <td>{{ $n->tanggal }}</td>
-                    <td>{{ $n->supplier->nama }}</td>
-                    <td>{{ $n->total_bayar }}</td>
-                    <td>{{ $n->status }}</td>
-                    <td>{{ $n->tanggal_pembayaran }}</td>
-                    <td>{{ $n->tanggal_jatuh_tempo }}</td>
-                    <td><a class='btn btn-xs btn-warning' href="{{route('pembelian.edit', $n->id)}}">+ Edit</a></td>
-                    <td><a href="{{route('detailNotaBeli.productsFromNota', $n->id)}}" class="btn btn-xs btn-success">Detail</a></td>
-                    <td>
-                        <form method="POST" action="{{ route('pembelian.destroy', $n->id) }}">
-                            @csrf
-                            @method('DELETE')
-                            <input type="submit" value="Hapus" class="btn btn-danger"
-                                onclick="return confirm('Apakah anda yakin menghapus data ini? ({{ $n->id }})')">
-                    </td>
+                    <td>{{ $b->id }}</td>
+                    <td>{{ $b->nama }}</td>
+                    <td>{{ $b->stok }} Pcs</td>
+                    <td>Rp. {{ $b->harga_jual }}</td>
+                    <td>Rp. {{ $b->hpp }}</td>
+                    <td>{{ $b->barcode }}</td>
+                    <td><a data-target="#modalcreate" data-toggle="modal" class="btn btn-info">+ Pembelian Barang</a></td>
+
                 </tr>
             @endforeach
         </tbody>
     </table>
+
+    {{-- <div class="modal fade" id="modalEdit" tabindex="-1" role="basic" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content" id="modalContent">
+            @include('inventory.getEditForm')
+        </div>
+    </div>
+</div> --}}
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
