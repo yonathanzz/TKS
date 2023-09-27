@@ -28,7 +28,11 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label>Total Bayar</label>
+                                <label>Jumlah Barang</label>
+                                <input type="text" class="form-control" id="total_bayar" name="total_bayar">
+                            </div>
+                            <div class="form-group">
+                                <label>Harga</label>
                                 <input type="text" class="form-control" id="total_bayar" name="total_bayar">
                             </div>
                             <div class="form-group">
