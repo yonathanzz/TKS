@@ -14,6 +14,7 @@
                 <form role="form" method="POST" action="{{ route('pembelian.store') }}">
                     @csrf
                     <div class="form-group">
+                        {{-- <span id="barangIdDisplay"></span> --}}
                         <input type="hidden" id="idbarang" name="idbarang">
                     </div>
                     <div class="modal-body">
@@ -83,7 +84,8 @@
                     <td>Rp. {{ $b->hpp }}</td>
                     <td>{{ $b->barcode }}</td>
                     <td>
-                        <a data-target="#modalcreate" data-toggle="modal" data-barang-id="{{ $b->id }}" class="btn btn-info">+ Pembelian Barang</a>
+                        <a data-target="#modalcreate" data-toggle="modal" data-barang-id="{{ $b->id }}"
+                            class="btn-info btn">+ Pembelian Barang</a>
                     </td>
 
                 </tr>
@@ -100,6 +102,10 @@
 </div> --}}
 
     <!-- Add this script at the end of your HTML before </body> -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
     <script>
         $(document).ready(function() {
             // When the "Pembelian Barang" button is clicked
@@ -107,14 +113,12 @@
                 // Get the data-barang-id value from the button's data attribute
                 var barangId = $(this).data('barang-id');
 
+                // $('#barangIdDisplay').text(barangId);
+
                 // Set the value of the hidden input field with ID "idbarang"
                 $('#idbarang').val(barangId);
             });
         });
     </script>
 
-
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 @endsection
