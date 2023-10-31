@@ -7,6 +7,7 @@ use App\Models\MetodePembayaran;
 use App\Models\NotaJual;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Cart;
 
 class NotaJualController extends Controller
 {
@@ -37,8 +38,51 @@ class NotaJualController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $notajual = new NotaJual();
+
+        $notajual->user_id = $request->input('user');
+        $notajual->metode_pembayaran_id = $request->input('metpem');
+        $notajual->tanggal_waktu = now();
+        $notajual->total_bayar = 0;
+
+        $notajual->save();
+
+        $produkWithDetails = $request->input('produk', []);
+
+        $totalBayar = 0;
+
+        foreach ($produkWithDetails as $productId => $productInfo) {
+            $jumlah = $productInfo['jumlah'];
+
+            $barang = Barang::find($productId);
+
+            if ($barang && $barang->stok >= $jumlah) {
+
+                $harga = $barang->harga_jual;
+                $subtotal = $harga * $jumlah;
+                $totalBayar += $subtotal;
+
+                if ($jumlah > 0) {
+                    $notajual->barangs()->attach($productId, ['jumlah' => $jumlah, 'harga' => $subtotal]);
+                }
+
+
+                if ($jumlah > 0) {
+                    $barang->stok -= $jumlah;
+                    $barang->save();
+                }
+
+                $barang->save();
+            }
+        }
+
+        $notajual->total_bayar = $totalBayar;
+
+        $notajual->save();
+
+        return redirect()->route('penjualan.index')->with('success', 'Penjualan berhasil ditambahkan.');
     }
+
 
     /**
      * Display the specified resource.
@@ -59,7 +103,7 @@ class NotaJualController extends Controller
         $users = User::all();
         $selMetpem = $notajual->metode_pembayaran;
         $metpems = MetodePembayaran::all();
-        return view('transaksi.notaJualEdit',compact('notajual', 'selUser','users', 'selMetpem','metpems'));
+        return view('transaksi.notaJualEdit', compact('notajual', 'selUser', 'users', 'selMetpem', 'metpems'));
     }
 
     /**
@@ -75,7 +119,7 @@ class NotaJualController extends Controller
         $notajual->metode_pembayaran_id = $request->get('metode_pembayaran_id');
         $notajual->save();
 
-        return redirect()->route('penjualan.index')->with('status','Your data is already up-to-date');
+        return redirect()->route('penjualan.index')->with('status', 'Your data is already up-to-date');
     }
 
     /**
@@ -83,32 +127,31 @@ class NotaJualController extends Controller
      */
     public function destroy(string $id)
     {
-        try{
+        try {
             $obj = NotaJual::find($id);
             $obj->delete();
-            return redirect()->route('penjualan.index')->with('status','Data berhasil di hapus');
-        }
-        catch(\PDOException $ex){
+            return redirect()->route('penjualan.index')->with('status', 'Data berhasil di hapus');
+        } catch (\PDOException $ex) {
             $msg = "Data Gagal dihapus";
-            return redirect()->route('penjualan.index')->with('status',$msg);
+            return redirect()->route('penjualan.index')->with('status', $msg);
         }
     }
 
-    public function addToCart($id){
-        $b = Barang::find($id);
+    // public function add(Request $request)
+    // {
+    //     $product = Barang::find($request->input('barang_id'));
 
-        $cart = session()->get('cart');
-        if(!isset($cart[$id])){
-            $cart[$id] = [
-                "name" => $b->nama,
-                "quantity" => 1,
-                "price" => $b->harga_jual
+    //     if (!$product) {
+    //         return redirect()->route('products.index')->with('error', 'Product not found.');
+    //     }
 
-            ];
-        }else{
-            $cart[$id]["quantity"]++;
-        }
-        session()->put('cart',$cart);
-        return redirect()->back()->with('success', 'barang berhasil ditambahkan ke nota');
-    }
+    //     Cart::add([
+    //         'id' => $product->id,
+    //         'name' => $product->name,
+    //         'qty' => $request->input('quantity', 1),
+    //         'price' => $product->price,
+    //     ]);
+
+    //     return redirect()->route('products.index')->with('success', 'Product added to cart.');
+    // }
 }

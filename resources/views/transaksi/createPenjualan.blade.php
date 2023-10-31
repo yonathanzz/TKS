@@ -6,7 +6,7 @@
     <h2>Tambah Penjualan Baru</h2>
     <p></p>
 
-    <form role="form" method="POST" action="{{ route('penjualan.create') }}">
+    <form role="form" method="POST" action="{{ route('penjualan.store') }}">
         @csrf
         <div>
             <label>Nama Kasir</label>
@@ -31,7 +31,7 @@
                     <th>Nama Barang</th>
                     <th>Stok</th>
                     <th>Harga Jual</th>
-                    <th>Add</th>
+                    <th>Jumlah</th>
                 </tr>
             </thead>
             <tbody>
@@ -42,17 +42,13 @@
                         <td>{{ $b->stok }} Pcs</td>
                         <td>Rp. {{ $b->harga_jual }}</td>
                         <td>
-                            <a class="btn btn-xs btn-info">+</a>
+                            <input type="number" name="produk[{{ $b->id }}][jumlah]" value="0" min="0">
                         </td>
-
                     </tr>
                 @endforeach
             </tbody>
         </table>
 
         <button type="submit" class="btn btn-primary">Submit</button>
-
     </form>
-
-
 @endsection
