@@ -9,12 +9,14 @@ class NotaBeli extends Model
 {
     use HasFactory;
     public $timestamps = false;
-    public function supplier(){
+    public function supplier()
+    {
         return $this->belongsTo(Supplier::class, 'supplier_id', 'id');
     }
-    public function barangs(){
+    public function barangs()
+    {
         return $this->belongsToMany(Barang::class, 'detail_nota_belis', 'nota_beli_id', 'barang_id')
-        ->withPivot('jumlah', 'harga_beli', 'status');
+            ->withPivot('jumlah', 'harga_beli', 'status');
     }
     public function returs()
     {

@@ -7,6 +7,7 @@ use App\Models\DetailNotaBeli;
 use App\Models\NotaBeli;
 use App\Models\Supplier;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 
 class NotaBeliController extends Controller
 {
@@ -32,43 +33,65 @@ class NotaBeliController extends Controller
         return view('transaksi.createpembelian', compact('suppliers', 'barangs'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        $data = new NotaBeli();
-        $data->tanggal = date('Y-m-d H:i:s', strtotime($request->get('tanggal')));
-        $data->supplier_id = $request->get('supplier_id');
-        $data->total_bayar = $request->get('quantity') * $request->get('harga_satuan');
-        $data->status = 'diproses';
-        // $data->tanggal_pembayaran = date('Y-m-d H:i:s');
-        $data->tanggal_jatuh_tempo = date('Y-m-d H:i:s', strtotime($request->get('tanggal_jatuh_tempo')));
-        $data->save();
+        try {
+            // Create a new NotaBeli record
+            $data = new NotaBeli();
+            $data->tanggal = now();
+            $data->supplier_id = $request->get('supplier_id');
+            $data->status = 'diproses';
+            $data->tanggal_jatuh_tempo = date('Y-m-d H:i:s', strtotime($request->get('tanggal_jatuh_tempo')));
+            $data->total_bayar = 0; // Initialize total_bayar to 0
+            $data->save();
 
-        // $tambahBarang = Barang::find($request->get('id'));
-        // $tambahBarang->stok += $request->get('quantity');
-        // $tambahBarang->hpp = (($tambahBarang->stok * $tambahBarang->hpp) + ($request->get('quantity') * $request->get('harga_satuan')))/($tambahBarang->stok + $request->get('quantity'));
-        $detailNota = new DetailNotaBeli();
-        $detailNota->barang_id = $request->input('idbarang'); // Ensure that 'idbarang' matches the name attribute in your form
-        $detailNota->nota_beli_id = $data->id;
-        $detailNota->jumlah = $request->get('quantity');
-        $detailNota->harga_beli = $request->get('harga_satuan');
-        $detailNota->status = 'diproses';
-        $detailNota->save();
+            // Handle the products selected in the form
+            $productsWithDetails = $request->input('produk', []);
 
+            foreach ($productsWithDetails as $productId => $productInfo) {
+                $quantity = $productInfo['jumlah'];
+                $hargaSatuan = $productInfo['harga_per_satuan'];
 
-        $tambahBarang = Barang::find($request->get('idbarang'));
-        $tambahBarang->stok += $request->get('quantity');
-        $totalCostCurrentStock = $tambahBarang->stok * $tambahBarang->hpp;
-        $newPurchaseCost = $request->get('quantity') * $request->get('harga_satuan');
-        $newHPP = ($totalCostCurrentStock + $newPurchaseCost) / ($tambahBarang->stok);
-        $tambahBarang->hpp = $newHPP;
+                if ($quantity > 0) { // Only process items with quantity greater than 0
+                    // Find the Barang model
+                    $barang = Barang::find($productId);
 
-        $tambahBarang->save();
+                    if ($barang) {
+                        // Attach the product to the NotaBeli with additional data (jumlah and harga_beli) in the pivot table
+                        $data->barangs()->attach($productId, ['jumlah' => $quantity, 'harga_beli' => $hargaSatuan, 'status' => 'diproses']);
 
-        return redirect()->route('pembelian.index')->with('success', 'Data has been successfully added.');
+                        // Update the stock of the product
+                        $barang->stok += $quantity;
+
+                        // Calculate the new HPP
+                        $totalCostCurrentStock = $barang->stok * $barang->hpp;
+                        $newPurchaseCost = $quantity * $hargaSatuan;
+                        $newHPP = ($totalCostCurrentStock + $newPurchaseCost) / ($barang->stok + $quantity);
+                        $barang->hpp = $newHPP;
+                        $barang->save();
+
+                        // Update the total_bayar field for the NotaBeli
+                        $data->total_bayar += $quantity * $hargaSatuan;
+                    }
+                }
+            }
+
+            $data->save();
+
+            return redirect()->route('pembelian.index')->with('success', 'Data has been successfully added.');
+        } catch (ValidationException $e) {
+            // Validation exception occurred, meaning the process failed
+            return redirect()->route('pembelian.create')->withErrors($e->errors());
+        }
     }
+
+
+
+
+
+
+
+
 
     /**
      * Display the specified resource.
