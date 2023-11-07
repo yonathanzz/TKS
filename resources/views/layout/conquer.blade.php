@@ -422,7 +422,9 @@ License: You must have a valid license purchased only from themeforest(the above
                                 <li>
                                     <a href="{{ @url('metode_pembayaran') }}">Metode Pembayaran</a>
                                 </li>
-
+                                <li>
+                                    <a href="{{ @url('penjualan') }}">Laporan Penjualan</a>
+                                </li>
                             </ul>
 
                     </li>
@@ -437,10 +439,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                 <a href="{{ @url('pembelian') }}">Pembelian</a>
                             </li>
                             <li>
-                                <a href="{{ @url('penjualan') }}">Penjualan</a>
-                            </li>
-                            <li>
-                                <a href="{{ @url('retur') }}">Retur</a>
+                                <a href="{{ route('penjualan.create') }}">Penjualan</a>
                             </li>
                         </ul>
 

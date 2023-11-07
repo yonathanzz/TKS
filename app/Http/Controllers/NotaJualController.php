@@ -18,7 +18,7 @@ class NotaJualController extends Controller
     {
         //
         $penjualans = NotaJual::all();
-        return view('transaksi.penjualan', compact('penjualans'));
+        return view('transaksi.laporanPenjualan', compact('penjualans'));
     }
 
     /**
