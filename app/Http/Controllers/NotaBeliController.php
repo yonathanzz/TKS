@@ -52,25 +52,21 @@ class NotaBeliController extends Controller
                 $quantity = $productInfo['jumlah'];
                 $hargaSatuan = $productInfo['harga_per_satuan'];
 
-                if ($quantity > 0) { // Only process items with quantity greater than 0
-                    // Find the Barang model
+                if ($quantity > 0) {
+
                     $barang = Barang::find($productId);
 
                     if ($barang) {
-                        // Attach the product to the NotaBeli with additional data (jumlah and harga_beli) in the pivot table
+
                         $data->barangs()->attach($productId, ['jumlah' => $quantity, 'harga_beli' => $hargaSatuan, 'status' => 'diproses']);
-
-                        // Update the stock of the product
-                        $barang->stok += $quantity;
-
-                        // Calculate the new HPP
                         $totalCostCurrentStock = $barang->stok * $barang->hpp;
                         $newPurchaseCost = $quantity * $hargaSatuan;
                         $newHPP = ($totalCostCurrentStock + $newPurchaseCost) / ($barang->stok + $quantity);
                         $barang->hpp = $newHPP;
+                        $barang->stok += $quantity;
                         $barang->save();
 
-                        // Update the total_bayar field for the NotaBeli
+
                         $data->total_bayar += $quantity * $hargaSatuan;
                     }
                 }

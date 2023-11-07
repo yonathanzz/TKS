@@ -43,45 +43,53 @@ class NotaJualController extends Controller
         $notajual->user_id = $request->input('user');
         $notajual->metode_pembayaran_id = $request->input('metpem');
         $notajual->tanggal_waktu = now();
-        $notajual->total_bayar = 0;
 
-        $notajual->save();
+        // Parse the JSON data from hidden-produk input
+        $produk = json_decode($request->input('produk'), true);
 
-        $produkWithDetails = $request->input('produk', []);
+        $totalBayar = $request->input('totalBayar');
 
-        $totalBayar = 0;
-
-        foreach ($produkWithDetails as $productId => $productInfo) {
-            $jumlah = $productInfo['jumlah'];
-
-            $barang = Barang::find($productId);
-
-            if ($barang && $barang->stok >= $jumlah) {
-
-                $harga = $barang->harga_jual;
-                $subtotal = $harga * $jumlah;
-                $totalBayar += $subtotal;
-
-                if ($jumlah > 0) {
-                    $notajual->barangs()->attach($productId, ['jumlah' => $jumlah, 'harga' => $subtotal]);
-                }
-
-
-                if ($jumlah > 0) {
-                    $barang->stok -= $jumlah;
-                    $barang->save();
-                }
-
-                $barang->save();
-            }
+        // Ensure that the totalBayar is greater than 0
+        if ($totalBayar <= 0) {
+            return redirect()->route('penjualan.create')->with('error', 'Invalid totalBayar value.');
         }
 
         $notajual->total_bayar = $totalBayar;
 
         $notajual->save();
 
+        foreach ($produk as $item) {
+            $barang = Barang::where('nama', $item['nama'])->first();
+
+            if ($barang) {
+                $jumlah = $item['jumlah'];
+
+                // Ensure that the quantity requested does not exceed available stock
+                if ($barang->stok >= $jumlah) {
+                    $harga = $item['harga'];
+                    $subtotal = $harga * $jumlah;
+
+                    // Attach the product to the NotaJual with quantity and price
+                    $notajual->barangs()->attach($barang->id, ['jumlah' => $jumlah, 'harga' => $subtotal]);
+
+                    // Update the stock
+                    $barang->stok -= $jumlah;
+                    $barang->save();
+                } else {
+                    // Handle insufficient stock
+                    return redirect()->route('penjualan.create')->with('error', 'Insufficient stock for ' . $item['nama']);
+                }
+            } else {
+                // Handle invalid product
+                return redirect()->route('penjualan.create')->with('error', 'Invalid product: ' . $item['nama']);
+            }
+        }
+
         return redirect()->route('penjualan.index')->with('success', 'Penjualan berhasil ditambahkan.');
     }
+
+
+
 
 
     /**
