@@ -7,6 +7,7 @@ use App\Models\MetodePembayaran;
 use App\Models\NotaJual;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 use Cart;
 
 class NotaJualController extends Controller
@@ -38,54 +39,91 @@ class NotaJualController extends Controller
      */
     public function store(Request $request)
     {
-        $notajual = new NotaJual();
+        try {
+            $data = new NotaJual();
+            $data->tanggal_waktu = now();
+            $data->user_id = $request->get('user');
+            $data->metode_pembayaran_id = $request->get('metpem');;
+            $data->total_bayar = 0; // Initialize total_bayar to 0
+            $data->save();
 
-        $notajual->user_id = $request->input('user');
-        $notajual->metode_pembayaran_id = $request->input('metpem');
-        $notajual->tanggal_waktu = now();
+            $productsWithDetails = $request->input('produk', []);
 
-        // Parse the JSON data from hidden-produk input
-        $produk = json_decode($request->input('produk'), true);
+            foreach ($productsWithDetails as $productId => $productInfo) {
+                $quantity = $productInfo['jumlah'];
+                $hargaSatuan = $productInfo['harga_per_satuan'];
 
-        $totalBayar = $request->input('totalBayar');
+                if ($quantity > 0) {
 
-        // Ensure that the totalBayar is greater than 0
-        if ($totalBayar <= 0) {
-            return redirect()->route('penjualan.create')->with('error', 'Invalid totalBayar value.');
-        }
+                    $barang = Barang::find($productId);
 
-        $notajual->total_bayar = $totalBayar;
+                    if ($barang) {
 
-        $notajual->save();
+                        $data->barangs()->attach($productId, ['jumlah' => $quantity, 'harga' => $hargaSatuan]);
+                        $currentStock = $barang->stok - $quantity;
+                        $barang->stok = $currentStock;
+                        $barang->save();
 
-        foreach ($produk as $item) {
-            $barang = Barang::where('nama', $item['nama'])->first();
-
-            if ($barang) {
-                $jumlah = $item['jumlah'];
-
-                // Ensure that the quantity requested does not exceed available stock
-                if ($barang->stok >= $jumlah) {
-                    $harga = $item['harga'];
-                    $subtotal = $harga * $jumlah;
-
-                    // Attach the product to the NotaJual with quantity and price
-                    $notajual->barangs()->attach($barang->id, ['jumlah' => $jumlah, 'harga' => $subtotal]);
-
-                    // Update the stock
-                    $barang->stok -= $jumlah;
-                    $barang->save();
-                } else {
-                    // Handle insufficient stock
-                    return redirect()->route('penjualan.create')->with('error', 'Insufficient stock for ' . $item['nama']);
+                        $data->total_bayar += $quantity * $hargaSatuan;
+                    }
                 }
-            } else {
-                // Handle invalid product
-                return redirect()->route('penjualan.create')->with('error', 'Invalid product: ' . $item['nama']);
             }
-        }
 
-        return redirect()->route('penjualan.index')->with('success', 'Penjualan berhasil ditambahkan.');
+            $data->save();
+
+            return redirect()->route('penjualan.index')->with('success', 'Data has been successfully added.');
+        } catch (ValidationException $e) {
+            // Validation exception occurred, meaning the process failed
+            return redirect()->route('penjualan.create')->withErrors($e->errors());
+        }
+        // $notajual = new NotaJual();
+
+        // $notajual->user_id = $request->input('user');
+        // $notajual->metode_pembayaran_id = $request->input('metpem');
+        // $notajual->tanggal_waktu = now();
+
+        // // Parse the JSON data from hidden-produk input
+        // $produk = json_decode($request->input('produk'), true);
+
+        // $totalBayar = $request->input('totalBayar');
+
+        // // Ensure that the totalBayar is greater than 0
+        // if ($totalBayar <= 0) {
+        //     return redirect()->route('penjualan.create')->with('error', 'Invalid totalBayar value.');
+        // }
+
+        // $notajual->total_bayar = $totalBayar;
+
+        // $notajual->save();
+
+        // foreach ($produk as $item) {
+        //     $barang = Barang::where('nama', $item['nama'])->first();
+
+        //     if ($barang) {
+        //         $jumlah = $item['jumlah'];
+
+        //         // Ensure that the quantity requested does not exceed available stock
+        //         if ($barang->stok >= $jumlah) {
+        //             $harga = $item['harga'];
+        //             $subtotal = $harga * $jumlah;
+
+        //             // Attach the product to the NotaJual with quantity and price
+        //             $notajual->barangs()->attach($barang->id, ['jumlah' => $jumlah, 'harga' => $subtotal]);
+
+        //             // Update the stock
+        //             $barang->stok -= $jumlah;
+        //             $barang->save();
+        //         } else {
+        //             // Handle insufficient stock
+        //             return redirect()->route('penjualan.create')->with('error', 'Insufficient stock for ' . $item['nama']);
+        //         }
+        //     } else {
+        //         // Handle invalid product
+        //         return redirect()->route('penjualan.create')->with('error', 'Invalid product: ' . $item['nama']);
+        //     }
+        // }
+
+        // return redirect()->route('penjualan.index')->with('success', 'Penjualan berhasil ditambahkan.');
     }
 
 
