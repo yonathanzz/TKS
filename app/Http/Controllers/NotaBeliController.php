@@ -7,7 +7,9 @@ use App\Models\DetailNotaBeli;
 use App\Models\NotaBeli;
 use App\Models\Supplier;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Log;
 
 class NotaBeliController extends Controller
 {
@@ -35,56 +37,60 @@ class NotaBeliController extends Controller
 
     public function store(Request $request)
     {
-        try {
-            // Create a new NotaBeli record
-            $data = new NotaBeli();
-            $data->tanggal = now();
-            $data->supplier_id = $request->get('supplier_id');
-            $data->status = 'diproses';
-            $data->tanggal_jatuh_tempo = date('Y-m-d H:i:s', strtotime($request->get('tanggal_jatuh_tempo')));
-            $data->total_bayar = 0; // Initialize total_bayar to 0
-            $data->save();
-
-            // Handle the products selected in the form
-            $productsWithDetails = $request->input('produk', []);
-
-            foreach ($productsWithDetails as $productId => $productInfo) {
-                $quantity = $productInfo['jumlah'];
-                $hargaSatuan = $productInfo['harga_per_satuan'];
-
-                if ($quantity > 0) {
-
-                    $barang = Barang::find($productId);
-
-                    if ($barang) {
-
-                        $data->barangs()->attach($productId, ['jumlah' => $quantity, 'harga_beli' => $hargaSatuan, 'status' => 'diproses']);
-                        $totalCostCurrentStock = $barang->stok * $barang->hpp;
-                        $newPurchaseCost = $quantity * $hargaSatuan;
-                        $newHPP = ($totalCostCurrentStock + $newPurchaseCost) / ($barang->stok + $quantity);
-                        $barang->hpp = $newHPP;
-                        $barang->stok += $quantity;
-                        $barang->save();
+        $notaBeli = new NotaBeli();
+        $notaBeli->tanggal = now();
+        $notaBeli->supplier_id = $request->get('supplier_id');
+        $notaBeli->status = 'diproses';
+        $notaBeli->tanggal_jatuh_tempo = date('Y-m-d H:i:s', strtotime($request->get('tanggal_jatuh_tempo')));
 
 
-                        $data->total_bayar += $quantity * $hargaSatuan;
-                    }
+        $purchasedItems = json_decode($request->input('produk'), true);
+        $totalBayar = $request->input('totalBayar');
+
+        if ($totalBayar <= 0) {
+            return redirect()->route('pembelian.create')->with('error', 'Invalid totalBayar value.');
+        }
+        $notaBeli->total_bayar = $totalBayar;
+        $notaBeli->save();
+
+        //ini aneh dia gamau ngeinsert ke pivot table (tabel detail_nota_belis)nya.
+        foreach ($purchasedItems as $item) {
+            $quantity = $item['jumlah'];
+            $hargaBeli = $item['harga_beli'];
+
+            if ($quantity > 0 && $hargaBeli > 0) {
+                $barang = Barang::find($item['barang_id']);
+
+                if ($barang) {
+                    $subtotal = $quantity * $hargaBeli;
+
+                    // Add record to DetailNotaBelis pivot table
+                    $notaBeli->barangs()->attach($barang->id, [
+                        'jumlah' => $quantity,
+                        'harga_beli' => $hargaBeli,
+                        'status' => 'diproses'
+                    ]);
+
+                    // Update stock
+                    $barang->stok += $quantity;
+                    $barang->save();
+
+                    // Calculate new HPP
+                    $totalCostCurrentStock = $barang->stok * $barang->hpp;
+                    $newPurchaseCost = $subtotal;
+                    $newHPP = ($totalCostCurrentStock + $newPurchaseCost) / ($barang->stok);
+                    $barang->hpp = $newHPP;
+                    $barang->save();
+
+                    $notaBeli->total_bayar += $subtotal;
+                } else{
+                    return redirect()->route('penjualan.create')->with('error', 'Invalid product: ' . $item['nama']);
                 }
             }
-
-            $data->save();
-
-            return redirect()->route('pembelian.index')->with('success', 'Data has been successfully added.');
-        } catch (ValidationException $e) {
-            // Validation exception occurred, meaning the process failed
-            return redirect()->route('pembelian.create')->withErrors($e->errors());
         }
+
+        return redirect()->route('pembelian.index')->with('success', 'Data has been successfully added.');
     }
-
-
-
-
-
 
 
 
