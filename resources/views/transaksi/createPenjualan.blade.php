@@ -128,6 +128,7 @@
                     };
 
                     totalBayar += parseInt(subtotal);
+
                 }
 
                 const hiddenProduk = document.getElementById("hidden-produk");

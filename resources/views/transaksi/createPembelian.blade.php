@@ -10,14 +10,15 @@
         </div>
     @endif
 
-    @if ($errors->has('error'))
+    @if (session('error'))
         <div class="alert alert-danger">
-            {{ $errors->first('error') }}
+            {{ session('error') }}
         </div>
     @endif
 
     <h2>Tambah Pembelian Baru</h2>
     <p></p>
+    {{--  --}}
     <form role="form" method="POST" action="{{ route('pembelian.store') }}">
         @csrf
         <div>
@@ -72,7 +73,7 @@
         </div>
 
         <button type="submit" class="btn btn-primary">Submit</button>
-        <input type="hidden" name="produk" id="hidden-purchased-items">
+        <input type="hidden" name="purchasedItems" id="hidden-purchased-items">
         <input type="hidden" name="totalBayar" id="hidden-totalBayar">
     </form>
 
@@ -85,8 +86,10 @@
 
             addButton.addEventListener("click", function() {
                 const selectedBarang = document.getElementById("selected_barang");
+                const selectedBarangId = $('#selected_barang').val();
                 const jumlahInput = document.getElementById("jumlah");
                 const hargaBeliInput = document.getElementById("harga_beli");
+
                 const selectedBarangName = selectedBarang.options[selectedBarang.selectedIndex].text;
                 const jumlahValue = jumlahInput.value;
                 const hargaBeliValue = hargaBeliInput.value;
@@ -97,10 +100,12 @@
                     const cell2 = row.insertCell(1);
                     const cell3 = row.insertCell(2);
                     const cell4 = row.insertCell(3);
+                    const cell5 = row.insertCell(4);
 
                     cell1.innerHTML = selectedBarangName;
                     cell2.innerHTML = jumlahValue;
                     cell3.innerHTML = hargaBeliValue;
+                    cell5.innerHTML = selectedBarangId;
 
                     const subtotal = parseInt(jumlahValue) * parseFloat(hargaBeliValue);
                     cell4.innerHTML = subtotal;
@@ -128,7 +133,8 @@
                 grandTotalCell.textContent = total.toFixed(2);
             }
 
-            submitButton.addEventListener("click", function() {
+            submitButton.addEventListener("click", function(event) {
+
                 const rows = itemList.rows;
                 const purchasedItems = {};
                 let totalBayar = 0;
@@ -140,12 +146,18 @@
                     const hargaBeli = cells[2].textContent;
                     const subtotal = cells[3].textContent;
 
-                    purchasedItems[i]={
+
+                    purchasedItems[i] = {
+                        // barang_id: barang_id,
                         nama: productName,
                         jumlah: quantity,
                         harga_beli: hargaBeli
                     };
                     totalBayar += parseInt(subtotal);
+                    console.log("Quantity:", quantity);
+                    console.log("Harga Beli:", hargaBeli);
+                    console.log("Subtotal:", subtotal);
+                    console.log("Accumulated Total Bayar:", totalBayar);
                 }
 
                 const hiddenPurchasedItems = document.getElementById("hidden-purchased-items");
@@ -153,6 +165,33 @@
                 hiddenPurchasedItems.value = JSON.stringify(purchasedItems);
                 hiddenTotalBayar.value = totalBayar;
             });
+            // submitButton.addEventListener("click", function() {
+            //     const rows = itemList.rows;
+            //     const purchasedItems = {};
+            //     let totalBayar = 0;
+
+            //     for (let i = 0; i < rows.length; i++) {
+            //         const cells = rows[i].cells;
+            //         const productName = cells[0].textContent;
+            //         const quantity = cells[1].textContent;
+            //         const hargaBeli = cells[2].textContent;
+            //         const subtotal = cells[3].textContent;
+            //         // console.log($('#selected_barang').val());
+            //         const selectedBarangId = $('#selected_barang').val();
+            //         purchasedItems[i]={
+            //             barang_id: selectedBarangId,
+            //             nama: productName,
+            //             jumlah: quantity,
+            //             harga_beli: hargaBeli
+            //         };
+            //         totalBayar += parseInt(subtotal);
+            //     }
+
+            //     const hiddenPurchasedItems = document.getElementById("hidden-purchased-items");
+            //     const hiddenTotalBayar = document.getElementById("hidden-totalBayar");
+            //     hiddenPurchasedItems.value = JSON.stringify(purchasedItems);
+            //     hiddenTotalBayar.value = totalBayar;
+            // });
         });
     </script>
 
