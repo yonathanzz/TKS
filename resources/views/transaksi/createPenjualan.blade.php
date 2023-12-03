@@ -24,7 +24,7 @@
             <label>Nama Kasir</label>
             <select name="user" id="user">
                 @foreach ($users as $u)
-                    <option value="{{ $u->id }}">{{ $u->nama }}</option>
+                    <option value="{{ $u->id }}">{{ $u->name }}</option>
                 @endforeach
             </select>
         </div>

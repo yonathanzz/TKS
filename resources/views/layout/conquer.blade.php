@@ -85,13 +85,23 @@ License: You must have a valid license purchased only from themeforest(the above
                 <li class="dropdown user">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown"
                         data-close-others="true">
-                        <img alt="" src="{{ asset('conquer/img/avatar3_small.jpg') }}" />
-                        <span class="username username-hide-on-mobile">Nick </span>
+                        <span class="username username-hide-on-mobile">Hello, {{ Auth::user()->name }}!!</span>
                         <i class="fa fa-angle-down"></i>
                     </a>
                     <ul class="dropdown-menu">
                         <li>
-                            <a href="login.html"><i class="fa fa-key"></i> Log Out</a>
+                            @auth
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                                    style="display: none;">
+                                    @csrf
+                                    <button type="submit">Log Out</button>
+                                </form>
+
+                                <a href="#"
+                                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                    <i class="fa fa-key"></i> Log Out
+                                </a>
+                            @endauth
                         </li>
                     </ul>
                 </li>
@@ -133,17 +143,17 @@ License: You must have a valid license purchased only from themeforest(the above
                             <span class="title">Administrasi</span>
                             <span class="arrow"></span>
                         </a>
-                            <ul class="sub-menu">
-                                <li>
-                                    <a href="{{ @url('supplier') }}">Supplier</a>
-                                </li>
-                                <li>
-                                    <a href="{{ @url('metode_pembayaran') }}">Metode Pembayaran</a>
-                                </li>
-                                <li>
-                                    <a href="{{ @url('penjualan') }}">Laporan Penjualan</a>
-                                </li>
-                            </ul>
+                        <ul class="sub-menu">
+                            <li>
+                                <a href="{{ @url('supplier') }}">Supplier</a>
+                            </li>
+                            <li>
+                                <a href="{{ @url('metode_pembayaran') }}">Metode Pembayaran</a>
+                            </li>
+                            <li>
+                                <a href="{{ @url('penjualan') }}">Laporan Penjualan</a>
+                            </li>
+                        </ul>
 
                     </li>
                     <li>

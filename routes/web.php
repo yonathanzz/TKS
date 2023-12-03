@@ -25,30 +25,36 @@ use App\Models\NotaBeli;
 |
 */
 
-Route::get('/', function () {
-    return view('exampleview');
+Route::middleware(['auth'])->group(function () {
+    Route::get('/', function () {
+        return view('exampleview');
+    });
+
+    Route::get('/barang', function () {
+        return view('inventory.barang');
+    });
+
+    Route::post('/barang/getEditForm', 'BarangController@getEditForm')->name('barang.getEditForm');
+
+    Route::get('/detailNotaBeli/{notaID}/products', [DetailNotaBeliController::class, 'productsFromNota'])->name('detailNotaBeli.productsFromNota');
+    Route::get('/detailNotaJual/{notaID}/products', [DetailNotaJualController::class, 'productsFromNota'])->name('detailNotaJual.productsFromNota');
+
+    Route::resource('barang', BarangController::class);
+    Route::resource('supplier', SupplierController::class);
+    Route::resource('retur', ReturController::class);
+    Route::resource('pembelian', NotaBeliController::class);
+    Route::resource('detailNotaBeli', DetailNotaBeliController::class);
+    Route::resource('penjualan', NotaJualController::class);
+    Route::resource('detailNotaJual', DetailNotaJualController::class);
+    Route::resource('metode_pembayaran', MetodePembayaranController::class);
+
+    route::get('/createPenjualan', [NotaJualController::class, 'createPenjualan'])->name('notajual.createPenjualan');
+
+    // Route::post('/login', 'LoginController@login')->name('login');
+
+    Route::get('/search', [BarangController::class, 'search'])->name('barang.search');
 });
 
-Route::get('/barang', function () {
-    return view('inventory.barang');
-});
+Auth::routes();
 
-Route::post('/barang/getEditForm', 'BarangController@getEditForm')->name('barang.getEditForm');
-
-Route::get('/detailNotaBeli/{notaID}/products', [DetailNotaBeliController::class, 'productsFromNota'])->name('detailNotaBeli.productsFromNota');
-Route::get('/detailNotaJual/{notaID}/products', [DetailNotaJualController::class, 'productsFromNota'])->name('detailNotaJual.productsFromNota');
-
-Route::resource('barang', BarangController::class);
-Route::resource('supplier', SupplierController::class);
-Route::resource('retur', ReturController::class);
-Route::resource('pembelian', NotaBeliController::class);
-Route::resource('detailNotaBeli', DetailNotaBeliController::class);
-Route::resource('penjualan', NotaJualController::class);
-Route::resource('detailNotaJual', DetailNotaJualController::class);
-Route::resource('metode_pembayaran', MetodePembayaranController::class);
-
-route::get('/createPenjualan', [NotaJualController::class, 'createPenjualan'])->name('notajual.createPenjualan');
-
-// Route::post('/login', 'LoginController@login')->name('login');
-
-Route::get('/search', [BarangController::class, 'search'])->name('barang.search');
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
