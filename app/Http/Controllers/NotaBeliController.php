@@ -43,62 +43,53 @@ class NotaBeliController extends Controller
         $notaBeli->status = 'diproses';
         $notaBeli->tanggal_jatuh_tempo = date('Y-m-d H:i:s', strtotime($request->get('tanggal_jatuh_tempo')));
 
-
-        $purchasedItems = json_decode($request->input('purchasedItems'), true);
         $totalBayar = $request->input('totalBayar');
-
-        if ($totalBayar <= 0) {
+        if (!is_numeric($totalBayar) || $totalBayar <= 0) {
             return redirect()->route('pembelian.create')->with('error', 'Invalid totalBayar value.');
         }
         $notaBeli->total_bayar = $totalBayar;
+
+        $purchasedItems = json_decode($request->input('purchasedItems'), true);
+        if (empty($purchasedItems)) {
+            return redirect()->route('pembelian.create')->with('error', 'No items selected for purchase.');
+        }
+
         $notaBeli->save();
 
-        //ini aneh dia gamau ngeinsert ke pivot table (tabel detail_nota_belis)nya.
+        foreach ($purchasedItems as $item) {
+            $barang = Barang::where('nama', $item['nama'])->first();
 
-        if ($purchasedItems !== null) {
-            foreach ($purchasedItems as $item) {
-                $barang = Barang::where('nama', $item['nama'])->first();
+            if ($barang) {
+                $quantity = $item['jumlah'];
+                $hargaBeli = $item['harga_beli'];
+                $subtotal = $quantity * $hargaBeli;
 
-                if ($barang) {
-                    $quantity = $item['jumlah'];
-                    $hargaBeli = $item['harga_beli'];
-                    $subtotal = $quantity * $hargaBeli;
+                // Add record to DetailNotaBelis pivot table
+                $notaBeli->barangs()->attach($barang->id, ['jumlah' => $quantity, 'harga_beli' => $hargaBeli, 'status' => 'diproses']);
 
-                    // Add record to DetailNotaBelis pivot table
-                    $notaBeli->barangs()->attach($barang->id, ['jumlah' => $quantity, 'harga_beli' => $hargaBeli, 'status' => 'diproses']);
+                // Cumulative cost of current stock
+                $totalCostCurrentStock = $barang->stok * $barang->hpp; // 8 * ~50,000 = ~400,000
 
+                // New total cost after the purchase
+                $newTotalCost = $totalCostCurrentStock + $subtotal; // ~504,000 (400,000 + 104,000)
 
-                    // Cumulative cost of current stock
-                    $totalCostCurrentStock = $barang->stok * $barang->hpp; // 8 * ~50,000 = ~400,000
+                // New total stock after the purchase
+                $newTotalStock = $barang->stok + $quantity; // 8 + 2 = 10
 
-                    // New total cost after the purchase
-                    $newTotalCost = $totalCostCurrentStock + $subtotal; // ~504,000 (400,000 + 104,000)
+                // Calculate the new HPP considering the total cost and total stock
+                $newHPP = $newTotalCost / $newTotalStock; // ~504,000 / 10 = ~50,400
+                $barang->hpp = $newHPP; // Update the HPP
+                $barang->stok = $newTotalStock; // Update the total stock
+                $barang->save();
 
-                    // New total stock after the purchase
-                    $newTotalStock = $barang->stok + $quantity; // 8 + 2 = 10
-
-                    // Calculate the new HPP considering the total cost and total stock
-                    $newHPP = $newTotalCost / $newTotalStock; // ~504,000 / 10 = ~50,400
-                    $barang->hpp = $newHPP; // Update the HPP
-                    $barang->save();
-
-                    $barang->stok = $newTotalStock;
-                    $barang->save();
-
-                    $notaBeli->total_bayar += $subtotal;
-                } else {
-                    return redirect()->route('penjualan.create')->with('error', 'Invalid product: ' . $item['nama']);
-                }
+                $notaBeli->total_bayar += $subtotal;
+            } else {
+                return redirect()->route('pembelian.create')->with('error', 'Invalid product: ' . $item['nama']);
             }
-        } else {
-            return redirect()->route('pembelian.create')->with('error', 'Null purchasedItems');
         }
 
         return redirect()->route('pembelian.index')->with('success', 'Data has been successfully added.');
     }
-
-
-
 
     /**
      * Display the specified resource.

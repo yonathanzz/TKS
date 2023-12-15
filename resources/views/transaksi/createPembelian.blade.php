@@ -1,6 +1,6 @@
 @extends('layout.conquer')
 
-@section('title', 'Tambah Pembelian')
+@section('title', 'Nota Beli Page')
 
 @section('konten')
 
@@ -71,47 +71,41 @@
                 </tfoot>
             </table>
         </div>
-
-        <button type="submit" class="btn btn-primary">Submit</button>
         <input type="hidden" name="purchasedItems" id="hidden-purchased-items">
         <input type="hidden" name="totalBayar" id="hidden-totalBayar">
+        <button type="submit" class="btn btn-primary" id="submit-button">Submit</button>
+
     </form>
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const addButton = document.getElementById("add-item");
             const itemList = document.getElementById("selected-item-table").getElementsByTagName('tbody')[0];
-            const grandTotalCell = document.getElementById("grand-total");
-            const submitButton = document.querySelector("form[method='POST'] button[type='submit']");
-
+            const submitButton = document.getElementById("submit-button");
+    
             addButton.addEventListener("click", function() {
                 const selectedBarang = document.getElementById("selected_barang");
-                const selectedBarangId = $('#selected_barang').val();
                 const jumlahInput = document.getElementById("jumlah");
                 const hargaBeliInput = document.getElementById("harga_beli");
-
                 const selectedBarangName = selectedBarang.options[selectedBarang.selectedIndex].text;
                 const jumlahValue = jumlahInput.value;
                 const hargaBeliValue = hargaBeliInput.value;
-
+    
                 if (selectedBarangName && jumlahValue > 0 && hargaBeliValue > 0) {
                     const row = itemList.insertRow(0);
                     const cell1 = row.insertCell(0);
                     const cell2 = row.insertCell(1);
                     const cell3 = row.insertCell(2);
                     const cell4 = row.insertCell(3);
-                    const cell5 = row.insertCell(4);
-
+    
                     cell1.innerHTML = selectedBarangName;
                     cell2.innerHTML = jumlahValue;
                     cell3.innerHTML = hargaBeliValue;
-                    cell5.innerHTML = selectedBarangId;
-
                     const subtotal = parseInt(jumlahValue) * parseFloat(hargaBeliValue);
                     cell4.innerHTML = subtotal;
-
                     updateGrandTotal();
-
+                    logItemList();
+    
                     selectedBarang.selectedIndex = 0;
                     jumlahInput.value = "0";
                     hargaBeliInput.value = "0";
@@ -119,80 +113,60 @@
                     alert("Please select a product, specify a quantity, and enter the purchase price.");
                 }
             });
-
+    
             function updateGrandTotal() {
                 const rows = itemList.rows;
                 let total = 0;
-
+    
                 for (let i = 0; i < rows.length; i++) {
                     const cells = rows[i].cells;
                     const subtotal = parseFloat(cells[3].textContent);
                     total += subtotal;
                 }
-
-                grandTotalCell.textContent = total.toFixed(2);
+    
+                document.getElementById("grand-total").textContent = total.toFixed(2);
             }
-
+    
             submitButton.addEventListener("click", function(event) {
-
                 const rows = itemList.rows;
                 const purchasedItems = {};
                 let totalBayar = 0;
-
+    
                 for (let i = 0; i < rows.length; i++) {
                     const cells = rows[i].cells;
                     const productName = cells[0].textContent;
                     const quantity = cells[1].textContent;
                     const hargaBeli = cells[2].textContent;
                     const subtotal = cells[3].textContent;
-
-
+    
                     purchasedItems[i] = {
-                        // barang_id: barang_id,
                         nama: productName,
                         jumlah: quantity,
-                        harga_beli: hargaBeli
+                        harga_beli: hargaBeli,
+                        subtotal: subtotal
                     };
-                    totalBayar += parseInt(subtotal);
-                    console.log("Quantity:", quantity);
-                    console.log("Harga Beli:", hargaBeli);
-                    console.log("Subtotal:", subtotal);
-                    console.log("Accumulated Total Bayar:", totalBayar);
+                    totalBayar += parseFloat(subtotal);
                 }
-
+    
                 const hiddenPurchasedItems = document.getElementById("hidden-purchased-items");
                 const hiddenTotalBayar = document.getElementById("hidden-totalBayar");
                 hiddenPurchasedItems.value = JSON.stringify(purchasedItems);
                 hiddenTotalBayar.value = totalBayar;
             });
-            // submitButton.addEventListener("click", function() {
-            //     const rows = itemList.rows;
-            //     const purchasedItems = {};
-            //     let totalBayar = 0;
-
-            //     for (let i = 0; i < rows.length; i++) {
-            //         const cells = rows[i].cells;
-            //         const productName = cells[0].textContent;
-            //         const quantity = cells[1].textContent;
-            //         const hargaBeli = cells[2].textContent;
-            //         const subtotal = cells[3].textContent;
-            //         // console.log($('#selected_barang').val());
-            //         const selectedBarangId = $('#selected_barang').val();
-            //         purchasedItems[i]={
-            //             barang_id: selectedBarangId,
-            //             nama: productName,
-            //             jumlah: quantity,
-            //             harga_beli: hargaBeli
-            //         };
-            //         totalBayar += parseInt(subtotal);
-            //     }
-
-            //     const hiddenPurchasedItems = document.getElementById("hidden-purchased-items");
-            //     const hiddenTotalBayar = document.getElementById("hidden-totalBayar");
-            //     hiddenPurchasedItems.value = JSON.stringify(purchasedItems);
-            //     hiddenTotalBayar.value = totalBayar;
-            // });
+    
+            function logItemList() {
+                const rows = itemList.rows;
+                console.log("List of Items:");
+    
+                for (let i = 0; i < rows.length; i++) {
+                    const cells = rows[i].cells;
+                    console.log(`Item ${i + 1}:`);
+                    console.log("Nama Barang:", cells[0].textContent);
+                    console.log("Jumlah:", cells[1].textContent);
+                    console.log("Harga Beli:", cells[2].textContent);
+                    console.log("Subtotal:", cells[3].textContent);
+                }
+            }
         });
-    </script>
-
+    </script>    
 @endsection
