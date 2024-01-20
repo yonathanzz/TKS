@@ -42,7 +42,8 @@
             <select name="selected_barang" id="selected_barang">
                 <option value="" selected disabled>Pilih Barang</option>
                 @foreach ($barangs as $b)
-                    <option value="{{ $b->id }}" data-harga="{{ $b->harga_jual }}">{{ $b->nama }}</option>
+                    <option value="{{ $b->id }}" data-harga="{{ $b->harga_jual }}" data-hpp="{{ $b->hpp }}">
+                        {{ $b->nama }}</option>
                 @endforeach
             </select>
         </div>
@@ -61,6 +62,7 @@
                         <th>Quantity</th>
                         <th>Price</th>
                         <th>Subtotal</th>
+                        <th>HPP per item</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -86,27 +88,67 @@
                 const jumlahValue = jumlahInput.value;
                 const selectedHarga = selectedBarang.options[selectedBarang.selectedIndex].getAttribute(
                     "data-harga");
+                const selectedHPP = selectedBarang.options[selectedBarang.selectedIndex].getAttribute(
+                    "data-hpp");
 
-                if (selectedBarangName && jumlahValue > 0) {
-                    const row = itemList.insertRow(0);
-                    const cell1 = row.insertCell(0);
-                    const cell2 = row.insertCell(1);
-                    const cell3 = row.insertCell(2);
-                    const cell4 = row.insertCell(3);
+                // if (selectedBarangName && jumlahValue > 0) {
+                //     const row = itemList.insertRow(0);
+                //     const cell1 = row.insertCell(0);
+                //     const cell2 = row.insertCell(1);
+                //     const cell3 = row.insertCell(2);
+                //     const cell4 = row.insertCell(3);
+                //     const cell5 = row.insertCell(4);
 
-                    cell1.innerHTML = selectedBarangName;
-                    cell2.innerHTML = jumlahValue;
-                    cell3.innerHTML = selectedHarga;
-                    const subtotal = parseInt(jumlahValue) * parseFloat(selectedHarga);
-                    cell4.innerHTML = subtotal;
+                //     cell1.innerHTML = selectedBarangName;
+                //     cell2.innerHTML = jumlahValue;
+                //     cell3.innerHTML = selectedHarga;
+                //     const subtotal = parseInt(jumlahValue) * parseFloat(selectedHarga);
+                //     cell4.innerHTML = subtotal;
+                //     cell5.innerHTML = selectedHPP
 
 
-                    selectedBarang.selectedIndex = 0;
-                    jumlahInput.value = "0";
+                //     selectedBarang.selectedIndex = 0;
+                //     jumlahInput.value = "0";
+                // } else {
+                //     alert("Please select a product, specify a quantity, and choose a price.");
+                // }
+                if (!isProductAlreadyAdded(selectedBarangName)) {
+                    if (selectedBarangName && jumlahValue > 0) {
+                        const row = itemList.insertRow(0);
+                        const cell1 = row.insertCell(0);
+                        const cell2 = row.insertCell(1);
+                        const cell3 = row.insertCell(2);
+                        const cell4 = row.insertCell(3);
+                        const cell5 = row.insertCell(4);
+
+                        cell1.innerHTML = selectedBarangName;
+                        cell2.innerHTML = jumlahValue;
+                        cell3.innerHTML = selectedHarga;
+                        const subtotal = parseInt(jumlahValue) * parseFloat(selectedHarga);
+                        cell4.innerHTML = subtotal;
+                        cell5.innerHTML = selectedHPP
+
+                        selectedBarang.selectedIndex = 0;
+                        jumlahInput.value = "0";
+                    } else {
+                        alert("Please select a product, specify a quantity, and choose a price.");
+                    }
                 } else {
-                    alert("Please select a product, specify a quantity, and choose a price.");
+                    alert("This product is already added to the list.");
                 }
             });
+
+            function isProductAlreadyAdded(productName) {
+                const rows = itemList.rows;
+                for (let i = 0; i < rows.length; i++) {
+                    const cells = rows[i].cells;
+                    const existingProductName = cells[0].textContent;
+                    if (existingProductName === productName) {
+                        return true;
+                    }
+                }
+                return false;
+            }
 
             submitButton.addEventListener("click", function() {
                 const rows = itemList.rows;
@@ -119,12 +161,14 @@
                     const quantity = cells[1].textContent;
                     const price = cells[2].textContent;
                     const subtotal = cells[3].textContent;
+                    const hpp = cells[4].textContent;
 
                     produk[i] = {
                         nama: productName,
                         jumlah: quantity,
                         harga: price,
                         subtotal: subtotal,
+                        hpp: hpp,
                     };
 
                     totalBayar += parseInt(subtotal);

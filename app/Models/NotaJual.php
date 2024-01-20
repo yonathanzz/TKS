@@ -21,6 +21,6 @@ class NotaJual extends Model
     public function barangs()
     {
         return $this->belongsToMany(Barang::class, 'detail_nota_juals', 'nota_jual_id', 'barang_id')
-            ->withPivot('jumlah', 'harga');
+            ->withPivot('jumlah', 'harga', 'hpp');
     }
 }
