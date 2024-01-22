@@ -45,12 +45,10 @@ class NotaJualController extends Controller
         $notajual->metode_pembayaran_id = $request->input('metpem');
         $notajual->tanggal_waktu = now();
 
-        // Parse the JSON data from hidden-produk input
         $produk = json_decode($request->input('produk'), true);
 
         $totalBayar = $request->input('totalBayar');
 
-        // Ensure that the totalBayar is greater than 0
         if ($totalBayar <= 0) {
             return redirect()->route('penjualan.create')->with('error', 'Invalid totalBayar value.');
         }
@@ -65,23 +63,19 @@ class NotaJualController extends Controller
             if ($barang) {
                 $jumlah = $item['jumlah'];
 
-                // Ensure that the quantity requested does not exceed available stock
                 if ($barang->stok >= $jumlah) {
                     $harga = $item['harga'];
                     $subtotal = $harga * $jumlah;
+                    $hpp = $item['hpp'];
 
-                    // Attach the product to the NotaJual with quantity and price
-                    $notajual->barangs()->attach($barang->id, ['jumlah' => $jumlah, 'harga' => $subtotal]);
+                    $notajual->barangs()->attach($barang->id, ['jumlah' => $jumlah, 'harga' => $subtotal, 'hpp' => $hpp]);
 
-                    // Update the stock
                     $barang->stok -= $jumlah;
                     $barang->save();
                 } else {
-                    // Handle insufficient stock
                     return redirect()->route('penjualan.create')->with('error', 'Insufficient stock for ' . $item['nama']);
                 }
             } else {
-                // Handle invalid product
                 return redirect()->route('penjualan.create')->with('error', 'Invalid product: ' . $item['nama']);
             }
         }
