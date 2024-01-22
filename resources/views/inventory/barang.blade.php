@@ -29,7 +29,7 @@
                             </div>
                             <div class="form-group">
                                 <label>Stok</label>
-                                <input type="text" class="form-control" id="stok" name="stok">
+                                <input type="number" class="form-control" id="stok" name="stok" min="0">
                             </div>
                             <div class="form-group">
                                 <label>Harga Jual</label>
