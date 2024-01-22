@@ -72,7 +72,7 @@
                     <td>{{ $n->id }}</td>
                     <td>{{ $n->tanggal_waktu }}</td>
                     <td>{{ $n->total_bayar }}</td>
-                    <td>{{ $n->user->nama }}</td>
+                    <td>{{ $n->user->name }}</td>
                     <td>{{ $n->metode_pembayaran->nama }}</td>
                     <td><a class='btn btn-xs btn-warning' href="{{route('penjualan.edit', $n->id)}}">+ Edit</a></td>
                     <td><a href="{{route('detailNotaJual.productsFromNota', $n->id)}}" class="btn btn-xs btn-success">Detail</a></td>

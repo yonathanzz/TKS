@@ -9,6 +9,8 @@
     <h2 style="text-align: center">Laporan Penjualan per Periode</h2>
     <p style="text-align: center">Transaksi pada periode tanggal {{ $startDate }} hingga {{ $endDate }}</p>
 <br>
+<button id="printButton" class="btn btn-primary">Print this Page</button>
+
     <table class="table">
         <thead>
             <tr>
@@ -51,4 +53,9 @@
 
 
     <a class="btn btn-primary" href="{{ route('penjualan.index') }}">Back to All Transactions</a>
+    <script>
+        document.getElementById('printButton').addEventListener('click', function() {
+            window.print();
+        });
+    </script>
 @endsection
