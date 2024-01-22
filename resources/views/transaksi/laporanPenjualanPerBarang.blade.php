@@ -3,7 +3,7 @@
 @section('title', 'Nota Jual Page')
 
 @section('konten')
-    <h2>Nota Penjualan</h2>
+    <h2>Laporan Penjualan per Barang</h2>
     <p>List Penjualan</p>
     @if (session('status'))
         <div class="alert alert-success">{{ session('status') }}</div>

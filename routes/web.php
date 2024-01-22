@@ -48,9 +48,14 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('detailNotaJual', DetailNotaJualController::class);
     Route::resource('metode_pembayaran', MetodePembayaranController::class);
 
-    route::get('/createPenjualan', [NotaJualController::class, 'createPenjualan'])->name('notajual.createPenjualan');
+    Route::get('/createPenjualan', [NotaJualController::class, 'createPenjualan'])->name('notajual.createPenjualan');
     Route::post('/penjualan/getNotaDetailsByBarangId', [NotaJualController::class, 'getNotaDetailsByBarangId'])
-    ->name('penjualan.getNotaDetailsByBarangId');
+        ->name('penjualan.getNotaDetailsByBarangId');
+
+    Route::get('/laporan-periode', [NotaJualController::class, 'showLaporanPeriode'])->name('laporan.periode');
+    Route::get('/laporan-per-barang', [NotaJualController::class, 'showLaporanPerBarang'])->name('laporan.barang');
+
+    Route::get('/transactions-by-date', [NotaJualController::class, 'showTransactionsByDate'])->name('transactions.by.date');
 
     // Route::post('/login', 'LoginController@login')->name('login');
 

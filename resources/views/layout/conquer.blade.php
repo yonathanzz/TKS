@@ -153,6 +153,9 @@ License: You must have a valid license purchased only from themeforest(the above
                             <li>
                                 <a href="{{ @url('penjualan') }}">Laporan Penjualan</a>
                             </li>
+                            <li>
+                                <a href="{{ route('laporan.barang') }}">Laporan Penjualan per Barang</a>
+                            </li>
                         </ul>
 
                     </li>

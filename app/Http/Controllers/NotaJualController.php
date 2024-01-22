@@ -15,22 +15,57 @@ class NotaJualController extends Controller
 {
     public function index()
     {
+        $penjualans = NotaJual::all();
+        return view('transaksi.laporanPenjualan', compact('penjualans'));
+    }
+
+    public function showLaporanPerBarang()
+    {
         $penjualans = DB::table('nota_juals')
             ->join('detail_nota_juals', 'nota_juals.id', '=', 'detail_nota_juals.nota_jual_id')
             ->join('barangs', 'barangs.id', '=', 'detail_nota_juals.barang_id')
             ->select('barangs.id', 'barangs.nama', DB::raw('sum(detail_nota_juals.jumlah) as terjual'))
             ->groupBy('barangs.id', 'barangs.nama')
             ->get();
-        
         return view('transaksi.laporanPenjualanPerBarang', compact('penjualans'));
     }
+    public function showTransactionsByDate(Request $request)
+    {
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
+
+        // Adjust the date format for month inputs
+        $startDate = $startDate . '-01'; // Set day to 01 for the start of the month
+        $endDate = $endDate . '-01'; // Set day to 01 for the start of the month
+
+        $penjualans = NotaJual::whereBetween('tanggal_waktu', [$startDate, $endDate])->get();
+
+        $penjualansWithProfit = $penjualans->map(function ($penjualan) {
+            $totalRevenue = $penjualan->total_bayar;
+
+            // Access the pivot table data using the pivot relation
+            $totalCost = $penjualan->barangs->sum(function ($barang) {
+                return $barang->pivot->hpp;
+            });
+
+            $profit = $totalRevenue - $totalCost;
+
+            // Add profit information to the Penjualan model
+            $penjualan->profit = $profit;
+
+            return $penjualan;
+        });
+
+        return view('transaksi.laporanPenjualanPerPeriode', compact('penjualansWithProfit', 'startDate', 'endDate'));
+    }
+
 
     public function getNotaDetailsByBarangId(Request $request)
     {
         $barangId = $request->input('id');
         $penjualans = NotaJual::join('detail_nota_juals', 'nota_juals.id', '=', 'detail_nota_juals.nota_jual_id')
             ->where('detail_nota_juals.barang_id', $barangId)
-            ->get();      
+            ->get();
         return view('transaksi.penjualanBarang', compact('penjualans'));
     }
 
