@@ -49,6 +49,8 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('metode_pembayaran', MetodePembayaranController::class);
 
     route::get('/createPenjualan', [NotaJualController::class, 'createPenjualan'])->name('notajual.createPenjualan');
+    Route::post('/penjualan/getNotaDetailsByBarangId', [NotaJualController::class, 'getNotaDetailsByBarangId'])
+    ->name('penjualan.getNotaDetailsByBarangId');
 
     // Route::post('/login', 'LoginController@login')->name('login');
 

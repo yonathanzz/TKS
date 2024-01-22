@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Barang;
+use Illuminate\Support\Facades\DB;
 use App\Models\MetodePembayaran;
 use App\Models\NotaJual;
 use App\Models\User;
@@ -12,31 +13,35 @@ use Cart;
 
 class NotaJualController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
-        $penjualans = NotaJual::all();
-        return view('transaksi.laporanPenjualan', compact('penjualans'));
+        $penjualans = DB::table('nota_juals')
+            ->join('detail_nota_juals', 'nota_juals.id', '=', 'detail_nota_juals.nota_jual_id')
+            ->join('barangs', 'barangs.id', '=', 'detail_nota_juals.barang_id')
+            ->select('barangs.id', 'barangs.nama', DB::raw('sum(detail_nota_juals.jumlah) as terjual'))
+            ->groupBy('barangs.id', 'barangs.nama')
+            ->get();
+        
+        return view('transaksi.laporanPenjualanPerBarang', compact('penjualans'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+    public function getNotaDetailsByBarangId(Request $request)
+    {
+        $barangId = $request->input('id');
+        $penjualans = NotaJual::join('detail_nota_juals', 'nota_juals.id', '=', 'detail_nota_juals.nota_jual_id')
+            ->where('detail_nota_juals.barang_id', $barangId)
+            ->get();      
+        return view('transaksi.penjualanBarang', compact('penjualans'));
+    }
+
     public function create()
     {
-        //
         $barangs = Barang::all();
         $users = User::all();
         $metode_pembayarans = MetodePembayaran::all();
         return view('transaksi.createPenjualan', compact('barangs', 'users', 'metode_pembayarans'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $notajual = new NotaJual();
